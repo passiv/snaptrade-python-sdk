@@ -1,0 +1,547 @@
+{
+    "account_balances": {
+        "endpoint": "accounts/%(account_id)s/balances",
+        "method": "get",
+        "path_params": [
+            "account_id"
+        ],
+        "validation_params": [
+            "clientId",
+            "timestamp",
+            "userId"
+        ]
+    },
+    "account_details": {
+        "endpoint": "accounts/%(account_id)s",
+        "method": "get",
+        "path_params": [
+            "account_id"
+        ],
+        "validation_params": [
+            "clientId",
+            "timestamp",
+            "userId"
+        ]
+    },
+    "account_holdings": {
+        "endpoint": "accounts/%(account_id)s/holdings",
+        "method": "get",
+        "path_params": [
+            "account_id"
+        ],
+        "validation_params": [
+            "clientId",
+            "timestamp",
+            "userId"
+        ]
+    },
+    "account_positions": {
+        "endpoint": "accounts/%(account_id)s/positions",
+        "method": "get",
+        "path_params": [
+            "account_id"
+        ],
+        "validation_params": [
+            "clientId",
+            "timestamp",
+            "userId"
+        ]
+    },
+    "accounts": {
+        "endpoint": "accounts",
+        "method": "get",
+        "path_params": [],
+        "validation_params": [
+            "clientId",
+            "timestamp",
+            "userId"
+        ]
+    },
+    "brokerage_authorizations": {
+        "endpoint": "authorizations",
+        "method": "get",
+        "path_params": [],
+        "validation_params": [
+            "clientId",
+            "timestamp",
+            "userId"
+        ]
+    },
+    "brokerages": {
+        "endpoint": "brokerages",
+        "method": "get",
+        "path_params": [],
+        "validation_params": [
+            "clientId",
+            "timestamp"
+        ]
+    },
+    "create_model_asset_class": {
+        "endpoint": "modelAssetClass",
+        "method": "post",
+        "path_params": [],
+        "validation_params": [
+            "clientId",
+            "timestamp",
+            "userId"
+        ]
+    },
+    "create_model_portfolio": {
+        "endpoint": "modelPortfolio",
+        "method": "post",
+        "path_params": [],
+        "validation_params": [
+            "clientId",
+            "timestamp",
+            "userId"
+        ]
+    },
+    "currencies": {
+        "endpoint": "currencies",
+        "method": "get",
+        "path_params": [],
+        "validation_params": [
+            "clientId",
+            "timestamp"
+        ]
+    },
+    "currencies_rates": {
+        "endpoint": "currencies/rates",
+        "method": "get",
+        "path_params": [],
+        "validation_params": [
+            "clientId",
+            "timestamp"
+        ]
+    },
+    "currency_pair_rate": {
+        "endpoint": "currencies/rates/%(currency_pair)s",
+        "method": "get",
+        "path_params": [
+            "currency_pair"
+        ],
+        "validation_params": [
+            "clientId",
+            "timestamp"
+        ]
+    },
+    "delete_model_asset_class": {
+        "endpoint": "modelAssetClass/%(model_asset_class_id)s",
+        "method": "delete",
+        "path_params": "model_asset_class_id",
+        "validation_params": [
+            "clientId",
+            "timestamp",
+            "userId"
+        ]
+    },
+    "delete_model_portfolio": {
+        "endpoint": "modelPortfolio/%(model_portfolio_id)s",
+        "method": "delete",
+        "path_params": "model_portfolio_id",
+        "validation_params": [
+            "clientId",
+            "timestamp",
+            "userId"
+        ]
+    },
+    "delete_user": {
+        "endpoint": "snapTrade/deleteUser",
+        "method": "post",
+        "path_params": [],
+        "validation_params": [
+            "clientId",
+            "timestamp"
+        ]
+    },
+    "get_model_portfolio": {
+        "endpoint": "modelPortfolio/%(model_portfolio_id)s",
+        "method": "get",
+        "path_params": "model_portfolio_id",
+        "validation_params": [
+            "clientId",
+            "timestamp",
+            "userId"
+        ]
+    },
+    "get_portfolio_group_settings": {
+        "endpoint": "portfolioGroups/%(group_id)s/settings",
+        "method": "get",
+        "path_params": [
+            "group_id"
+        ],
+        "validation_params": [
+            "clientId",
+            "timestamp",
+            "userId"
+        ]
+    },
+    "holdings": {
+        "endpoint": "holdings",
+        "method": "get",
+        "path_params": [],
+        "validation_params": [
+            "clientId",
+            "timestamp",
+            "accounts",
+            "userId"
+        ]
+    },
+    "user_login_redirect_uri": {
+        "endpoint": "snapTrade/login",
+        "method": "post",
+        "path_params": [],
+        "validation_params": [
+            "clientId",
+            "timestamp"
+        ]
+    },
+    "model_asset_class": {
+        "endpoint": "modelAssetClass/%(model_asset_class_id)s",
+        "method": "get",
+        "path_params": "model_asset_class_id",
+        "validation_params": [
+            "clientId",
+            "timestamp",
+            "userId"
+        ]
+    },
+    "model_asset_classes": {
+        "endpoint": "modelAssetClass",
+        "method": "get",
+        "path_params": [],
+        "validation_params": [
+            "clientId",
+            "timestamp",
+            "userId"
+        ]
+    },
+    "model_portfolios": {
+        "endpoint": "modelPortfolio",
+        "method": "get",
+        "path_params": [],
+        "validation_params": [
+            "clientId",
+            "timestamp",
+            "userId"
+        ]
+    },
+    "obtain_jwt_token": {
+        "endpoint": "snapTrade/redeemToken",
+        "method": "post",
+        "path_params": [],
+        "validation_params": [
+            "clientId"
+        ]
+    },
+    "portfolio_group_accounts": {
+        "endpoint": "portfolioGroups/%(group_id)s/accounts",
+        "method": "get",
+        "path_params": [
+            "group_id"
+        ],
+        "validation_params": [
+            "clientId",
+            "timestamp",
+            "userId"
+        ]
+    },
+    "portfolio_group_balances": {
+        "endpoint": "portfolioGroups/%(group_id)s/balances",
+        "method": "get",
+        "path_params": [
+            "group_id"
+        ],
+        "validation_params": [
+            "clientId",
+            "timestamp",
+            "userId"
+        ]
+    },
+    "portfolio_group_calculated_trades": {
+        "endpoint": "portfolioGroups/%(group_id)s/calculatedtrades",
+        "method": "get",
+        "path_params": [
+            "group_id"
+        ],
+        "validation_params": [
+            "clientId",
+            "timestamp",
+            "userId"
+        ]
+    },
+    "portfolio_group_calculated_trades_trades_list": {
+        "endpoint": "portfolioGroups/%(group_id)s/calculatedtrades/%(calculated_trade_id)s",
+        "method": "get",
+        "path_params": [
+            "group_id",
+            "calculated_trade_id"
+        ],
+        "validation_params": [
+            "clientId",
+            "timestamp",
+            "userId"
+        ]
+    },
+    "portfolio_group_create": {
+        "endpoint": "portfolioGroups/",
+        "method": "post",
+        "path_params": [],
+        "validation_params": [
+            "clientId",
+            "timestamp",
+            "userId"
+        ]
+    },
+    "portfolio_group_delete": {
+        "endpoint": "portfolioGroups/%(group_id)s",
+        "method": "delete",
+        "path_params": [
+            "group_id"
+        ],
+        "validation_params": [
+            "clientId",
+            "timestamp",
+            "userId"
+        ]
+    },
+    "portfolio_group_excluded_assets": {
+        "endpoint": "portfolioGroups/%(group_id)s/excludedassets",
+        "method": "get",
+        "path_params": [
+            "group_id"
+        ],
+        "validation_params": [
+            "clientId",
+            "timestamp",
+            "userId"
+        ]
+    },
+    "portfolio_group_excluded_assets_delete": {
+        "endpoint": "portfolioGroups/%(group_id)s/excludedassets/%(symbol_id)s",
+        "method": "delete",
+        "path_params": [
+            "group_id",
+            "symbol_id"
+        ],
+        "validation_params": [
+            "clientId",
+            "timestamp",
+            "userId"
+        ]
+    },
+    "portfolio_group_excluded_assets_update": {
+        "endpoint": "portfolioGroups/%(group_id)s/excludedassets",
+        "method": "post",
+        "path_params": [
+            "group_id"
+        ],
+        "validation_params": [
+            "clientId",
+            "timestamp",
+            "userId"
+        ]
+    },
+    "portfolio_group_get": {
+        "endpoint": "portfolioGroups/%(group_id)s",
+        "method": "get",
+        "path_params": [
+            "group_id"
+        ],
+        "validation_params": [
+            "clientId",
+            "timestamp",
+            "userId"
+        ]
+    },
+    "portfolio_group_import": {
+        "endpoint": "portfolioGroups/%(group_id)s/import",
+        "method": "post",
+        "path_params": [
+            "group_id"
+        ],
+        "validation_params": [
+            "clientId",
+            "timestamp",
+            "userId"
+        ]
+    },
+    "portfolio_group_info": {
+        "endpoint": "portfolioGroups/%(group_id)s/info",
+        "method": "get",
+        "path_params": [
+            "group_id"
+        ],
+        "validation_params": [
+            "clientId",
+            "timestamp",
+            "userId"
+        ]
+    },
+    "portfolio_group_positions": {
+        "endpoint": "portfolioGroups/%(group_id)s/positions",
+        "method": "get",
+        "path_params": [
+            "group_id"
+        ],
+        "validation_params": [
+            "clientId",
+            "timestamp",
+            "userId"
+        ]
+    },
+    "portfolio_group_targets": {
+        "endpoint": "portfolioGroups/%(group_id)s/targets",
+        "method": "get",
+        "path_params": [
+            "group_id"
+        ],
+        "validation_params": [
+            "clientId",
+            "timestamp",
+            "userId"
+        ]
+    },
+    "portfolio_group_targets_create": {
+        "endpoint": "portfolioGroups/%(group_id)s/targets",
+        "method": "post",
+        "path_params": [
+            "group_id"
+        ],
+        "validation_params": [
+            "clientId",
+            "timestamp",
+            "userId"
+        ]
+    },
+    "portfolio_group_targets_symbol_search": {
+        "endpoint": "portfolioGroups/%(group_id)s/symbols",
+        "method": "post",
+        "path_params": [
+            "group_id"
+        ],
+        "validation_params": [
+            "clientId",
+            "timestamp",
+            "userId"
+        ]
+    },
+    "portfolio_group_update": {
+        "endpoint": "portfolioGroups/%(group_id)s",
+        "method": "put",
+        "path_params": [
+            "group_id"
+        ],
+        "validation_params": [
+            "clientId",
+            "timestamp",
+            "userId"
+        ]
+    },
+    "portfolio_groups": {
+        "endpoint": "portfolioGroups",
+        "method": "get",
+        "path_params": [],
+        "validation_params": [
+            "clientId",
+            "timestamp",
+            "userId"
+        ]
+    },
+    "register_user": {
+        "endpoint": "snapTrade/registerUser",
+        "method": "post",
+        "path_params": [],
+        "validation_params": [
+            "clientId",
+            "timestamp"
+        ]
+    },
+    "reset_portfolio_group_targets": {
+        "endpoint": "portfolioGroups/%(group_id)s/targets",
+        "method": "delete",
+        "path_params": [
+            "group_id"
+        ],
+        "validation_params": [
+            "clientId",
+            "timestamp",
+            "userId"
+        ]
+    },
+    "symbol_by_id": {
+        "endpoint": "symbols/%(symbol_id)s",
+        "method": "get",
+        "path_params": [
+            "symbol_id"
+        ],
+        "validation_params": [
+            "clientId",
+            "timestamp"
+        ]
+    },
+    "symbol_by_ticker": {
+        "endpoint": "symbols/%(ticker)s",
+        "method": "get",
+        "path_params": [
+            "ticker"
+        ],
+        "validation_params": [
+            "clientId",
+            "timestamp"
+        ]
+    },
+    "symbol_search": {
+        "endpoint": "symbols",
+        "method": "post",
+        "path_params": [],
+        "validation_params": [
+            "clientId",
+            "timestamp"
+        ]
+    },
+    "update_account_info": {
+        "endpoint": "accounts/%(account_id)s",
+        "method": "put",
+        "path_params": [
+            "account_id"
+        ],
+        "validation_params": [
+            "clientId",
+            "timestamp",
+            "userId"
+        ]
+    },
+    "update_model_asset_class": {
+        "endpoint": "modelAssetClass/%(model_asset_class_id)s",
+        "method": "post",
+        "path_params": "model_asset_class_id",
+        "validation_params": [
+            "clientId",
+            "timestamp",
+            "userId"
+        ]
+    },
+    "update_model_portfolio": {
+        "endpoint": "modelPortfolio/%(model_portfolio_id)s",
+        "method": "post",
+        "path_params": "model_portfolio_id",
+        "validation_params": [
+            "clientId",
+            "timestamp",
+            "userId"
+        ]
+    },
+    "update_portfolio_group_settings": {
+        "endpoint": "portfolioGroups/%(group_id)s/settings",
+        "method": "put",
+        "path_params": [
+            "group_id"
+        ],
+        "validation_params": [
+            "clientId",
+            "timestamp",
+            "userId"
+        ]
+    }
+}
