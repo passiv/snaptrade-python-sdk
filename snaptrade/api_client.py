@@ -12,10 +12,11 @@ class SnapTradeAPIClient:
     base_url = "https://api.passiv.com/api/"
     endpoints = SnapTradeUtils.get_api_endpoints()
 
-    def __init__(self, client_id, consumer_key, return_full_response_obj=False):
+    def __init__(self, client_id, consumer_key, return_response_as_dict=True, debug_response=False):
         self.client_id = client_id
         self.consumer_key = consumer_key
-        self.return_full_response_obj = return_full_response_obj
+        self.return_response_as_dict = return_response_as_dict
+        self.debug_response = debug_response
 
     def sign_request(self, request_data, request_path, request_query):
         sig_object = {"content": request_data, "path": request_path, "query": request_query}
@@ -82,17 +83,13 @@ class SnapTradeAPIClient:
         elif method == "delete":
             response = requests.delete(endpoint, headers=headers, params=query_params, json=data)
 
-        if self.return_full_response_obj:
+        if self.debug_response:
             return response
+
+        if self.return_response_as_dict:
+            return response.json()
         else:
-            if response.status_code != 204:
-                formatted_json = deepcopy(response.json)
-            else:
-                formatted_json = dict()
-
-            formatted_json["status_code"] = response.status_code
-
-            return formatted_json
+            return SnapTradeUtils.convert_to_simple_namespace(response.content)
 
     def register_user(self, userId):
         """
@@ -103,11 +100,9 @@ class SnapTradeAPIClient:
         endpoint_name = "register_user"
 
         data = dict(userId=userId)
-        query_params = self.prepare_query_params(endpoint_name=endpoint_name)
+        query_params = self.prepare_query_params(endpoint_name)
 
-        response = self._make_request(endpoint_name, query_params=query_params, data=data)
-
-        return response
+        return self._make_request(endpoint_name, query_params=query_params, data=data)
 
     def delete_user(self, userId, userSecret):
         """
@@ -118,11 +113,9 @@ class SnapTradeAPIClient:
         endpoint_name = "delete_user"
 
         data = dict(userId=userId, userSecret=userSecret)
-        query_params = self.prepare_query_params(endpoint_name=endpoint_name)
+        query_params = self.prepare_query_params(endpoint_name)
 
-        response = self._make_request(endpoint_name, query_params=query_params, data=data)
-
-        return response
+        return self._make_request(endpoint_name, query_params=query_params, data=data)
 
     def generate_new_user_secret(self, userId):
         """
@@ -133,19 +126,28 @@ class SnapTradeAPIClient:
         endpoint_name = "register_user"
 
         data = dict(userId=userId)
-        query_params = self.prepare_query_params(endpoint_name=endpoint_name)
+        query_params = self.prepare_query_params(endpoint_name)
 
-        response = self._make_request(endpoint_name, query_params=query_params, data=data)
-
-        return response
+        return self._make_request(endpoint_name, query_params=query_params, data=data)
 
     def get_user_login_redirect_uri(self, userId, userSecret):
         endpoint_name = "user_login_redirect_uri"
 
-        query_params = self.prepare_query_params(endpoint_name=endpoint_name)
+        query_params = self.prepare_query_params(endpoint_name)
 
         data = dict(userId=userId, userSecret=userSecret)
 
-        response = self._make_request(endpoint_name, query_params=query_params, data=data)
+        return self._make_request(endpoint_name, query_params=query_params, data=data)
 
-        return response
+    def get_all_holdings(self, userId, account_numbers=None):
+        endpoint_name = "holdings"
+
+        intial_query_params = {"userId":userId}
+
+        if account_numbers:
+            ",".join(account_numbers)
+            intial_query_params["accounts"] = accounts
+
+        query_params = self.prepare_query_params(endpoint_name, initial_params=intial_query_params)
+
+        return self._make_request(endpoint_name, query_params=query_params, data=data)
