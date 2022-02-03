@@ -91,6 +91,10 @@ class SnapTradeAPIClient:
         else:
             return SnapTradeUtils.convert_to_simple_namespace(response.content)
 
+
+
+
+
     def register_user(self, userId):
         """
         Register a new user in SnapTrade.
@@ -150,4 +154,4 @@ class SnapTradeAPIClient:
 
         query_params = self.prepare_query_params(endpoint_name, initial_params=intial_query_params)
 
-        return self._make_request(endpoint_name, query_params=query_params, data=data)
+        return self._make_request(endpoint_name, query_params=query_params)
