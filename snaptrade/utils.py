@@ -7,7 +7,12 @@ class SnapTradeUtils:
     @classmethod
     def convert_to_simple_namespace(cls, data):
         """Converts json data into python object"""
-        return SimpleNamespace(**data)
+        if type(data) == dict:
+            serialized_data = json.dumps(data)
+        else:
+            serialized_data = data
+
+        return json.loads(serialized_data, object_hook=lambda d: SimpleNamespace(**d))
 
     @classmethod
     def get_api_endpoints(cls):
