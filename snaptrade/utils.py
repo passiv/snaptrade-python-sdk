@@ -1,9 +1,9 @@
 from types import SimpleNamespace
 import time
+from datetime import datetime, timezone
 import json
 
 class SnapTradeUtils:
-
     @classmethod
     def convert_to_simple_namespace(cls, data):
         """Converts json data into python object"""
@@ -22,3 +22,10 @@ class SnapTradeUtils:
     @classmethod
     def get_epoch_time(cls):
         return int(time.time())
+
+    @classmethod
+    def get_utc_time(cls, string_format=None):
+        if string_format:
+            return datetime.now(timezone.utc).strftime(string_format)
+        else:
+            return datetime.now(timezone.utc)
