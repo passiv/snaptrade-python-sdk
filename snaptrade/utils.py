@@ -16,7 +16,7 @@ class SnapTradeUtils:
 
     @classmethod
     def get_api_endpoints(cls):
-        with open('./snaptrade/endpoints.json', 'r') as f:
+        with open('./snaptrade/api_client/endpoints.json', 'r') as f:
             return json.load(f)
 
     @classmethod
