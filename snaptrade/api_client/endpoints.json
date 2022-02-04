@@ -57,6 +57,16 @@
             "userId"
         ]
     },
+    "api_status": {
+        "endpoint": "",
+        "method": "get",
+        "path_params": [],
+        "validation_params": [
+            "clientId",
+            "timestamp",
+            "userId"
+        ]
+    },
     "brokerage_authorizations": {
         "endpoint": "authorizations",
         "method": "get",
