@@ -91,10 +91,6 @@ class SnapTradeAPIClient:
         else:
             return SnapTradeUtils.convert_to_simple_namespace(response.content)
 
-
-
-
-
     def register_user(self, userId):
         """
         Register a new user in SnapTrade.
