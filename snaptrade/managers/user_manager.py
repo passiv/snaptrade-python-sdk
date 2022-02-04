@@ -3,8 +3,8 @@ from snaptrade.models import User
 
 
 class UserManager(BaseManager):
-    def __init__(self, client_id, client_secret, user_id=None, user_secret=None):
-        super().__init__(client_id, client_secret, return_response_as_dict=False)
+    def __init__(self, client_id, consumer_key, user_id=None, user_secret=None):
+        super().__init__(client_id, consumer_key, return_response_as_dict=False)
         self.user_id = user_id
         self.user_secret = user_secret
 
