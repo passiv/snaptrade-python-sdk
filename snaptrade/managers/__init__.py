@@ -1,2 +1,1 @@
-from snaptrade.managers.base_manager import BaseManager
-from snaptrade.managers.user_manager import UserManager
+from snaptrade.managers.api_manager import APIManager
