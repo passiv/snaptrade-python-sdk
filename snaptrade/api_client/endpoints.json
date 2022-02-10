@@ -54,7 +54,8 @@
         "validation_params": [
             "clientId",
             "timestamp",
-            "userId"
+            "userId",
+            "userSecret"
         ]
     },
     "api_status": {
