@@ -16,6 +16,7 @@ class BaseModel:
 
     def display_as_dict(self):
         import json
+
         return json.loads(json.dumps(self, default=lambda o: o.__dict__))
 
     @property

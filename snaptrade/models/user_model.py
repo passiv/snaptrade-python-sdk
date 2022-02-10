@@ -1,5 +1,6 @@
 from snaptrade.models.base_model import BaseModel
 
+
 class User(BaseModel):
     def __init__(self, user_id, user_secret=None):
         self.user_id = user_id
