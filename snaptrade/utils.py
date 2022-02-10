@@ -7,10 +7,14 @@ class SnapTradeUtils:
     @classmethod
     def convert_to_simple_namespace(cls, data):
         """Converts json data into python object"""
-        if type(data) == dict:
-            serialized_data = json.dumps(data)
+        if type(data) == list:
+            data = {
+                "class_name": "SimpleNamepace",
+                "data": data
+            }
         else:
-            serialized_data = data
+            data["class_name"] = "SimpleNamepace"
+        serialized_data = json.dumps(data)
 
         return json.loads(serialized_data, object_hook=lambda d: SimpleNamespace(**d))
 
