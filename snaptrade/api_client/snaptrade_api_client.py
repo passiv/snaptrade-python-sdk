@@ -6,24 +6,38 @@ from base64 import b64encode
 from hashlib import sha256
 from urllib.parse import urlencode
 from snaptrade.utils import SnapTradeUtils
+from requests.exceptions import ConnectionError
+
 
 class SnapTradeAPIClient:
     api_version = "v1/"
-    base_url = "https://api.passiv.com/api/"
+    base_url = "https://api.snaptrade.com/api/"
     endpoints = SnapTradeUtils.get_api_endpoints()
 
-    def __init__(self, client_id, consumer_key, return_response_as_dict=True, debug_response=False):
+    def __init__(
+        self,
+        client_id,
+        consumer_key,
+        return_response_as_dict=True,
+        debug_response=False,
+    ):
         self.client_id = client_id
         self.consumer_key = consumer_key
         self.return_response_as_dict = return_response_as_dict
         self.debug_response = debug_response
 
     def sign_request(self, request_data, request_path, request_query):
-        sig_object = {"content": request_data, "path": request_path, "query": request_query}
+        sig_object = {
+            "content": request_data,
+            "path": request_path,
+            "query": request_query,
+        }
 
         sig_content = json.dumps(sig_object, separators=(",", ":"), sort_keys=True)
 
-        sig_digest = hmac.new(self.consumer_key.encode(), sig_content.encode(), sha256).digest()
+        sig_digest = hmac.new(
+            self.consumer_key.encode(), sig_content.encode(), sha256
+        ).digest()
 
         signature = b64encode(sig_digest).decode()
 
@@ -47,7 +61,11 @@ class SnapTradeAPIClient:
         """Generates API endpoint based on endpoint_name and params given"""
         endpoint = self.endpoints[endpoint_name]
 
-        return "%s%s%s" % (self.base_url, self.api_version, endpoint["endpoint"] % path_params,)
+        return "%s%s%s" % (
+            self.base_url,
+            self.api_version,
+            endpoint["endpoint"] % path_params,
+        )
 
     def prepare_query_params(self, endpoint_name, initial_params=None):
         if initial_params:
@@ -60,7 +78,9 @@ class SnapTradeAPIClient:
 
         return prepared_params
 
-    def _make_request(self, endpoint_name, data=None, path_params=None, query_params=None):
+    def _make_request(
+        self, endpoint_name, data=None, path_params=None, query_params=None
+    ):
         if path_params is None:
             path_params = {}
 
@@ -74,28 +94,58 @@ class SnapTradeAPIClient:
 
         method = self.endpoints[endpoint_name]["method"]
 
-        if method == "post":
-            response = requests.post(endpoint, headers=headers, params=query_params, json=data)
-        elif method == "get":
-            response = requests.get(endpoint, headers=headers, params=query_params)
-        elif method == "put":
-            response = requests.put(endpoint, headers=headers, params=query_params, json=data)
-        elif method == "delete":
-            response = requests.delete(endpoint, headers=headers, params=query_params, json=data)
+        response = None
+
+        try:
+            if method == "post":
+                response = requests.post(
+                    endpoint, headers=headers, params=query_params, json=data
+                )
+            elif method == "get":
+                response = requests.get(endpoint, headers=headers, params=query_params)
+            elif method == "put":
+                response = requests.put(
+                    endpoint, headers=headers, params=query_params, json=data
+                )
+            elif method == "delete":
+                response = requests.delete(
+                    endpoint, headers=headers, params=query_params, json=data
+                )
+        except ConnectionError:
+            error_message = dict(
+                status_code=502, detail="Failed to connect to api server", code=0000
+            )
+            if self.return_response_as_dict:
+                return error_message
+            else:
+                return SnapTradeUtils.convert_to_simple_namespace(error_message)
 
         if self.debug_response:
             return response
 
-        if self.return_response_as_dict:
-            return response.json()
+        if response.content:
+            data = response.json()
         else:
-            return SnapTradeUtils.convert_to_simple_namespace(response.content)
+            data = dict(status_code=response.status_code, detail="No content returned")
 
+        if self.return_response_as_dict:
+            return data
+        else:
+            return SnapTradeUtils.convert_to_simple_namespace(data)
 
+    """Gets API Status"""
 
+    def api_status(self):
+        """Gets Snaptrade API status"""
+        endpoint_name = "api_status"
 
+        query_params = self.prepare_query_params(endpoint_name)
 
-    def register_user(self, userId):
+        return self._make_request(endpoint_name, query_params=query_params)
+
+    """User registration, auth and deletion"""
+
+    def register_user(self, user_id):
         """
         Register a new user in SnapTrade.
 
@@ -103,55 +153,212 @@ class SnapTradeAPIClient:
         """
         endpoint_name = "register_user"
 
-        data = dict(userId=userId)
+        data = dict(userId=user_id)
         query_params = self.prepare_query_params(endpoint_name)
 
         return self._make_request(endpoint_name, query_params=query_params, data=data)
 
-    def delete_user(self, userId, userSecret):
+    def delete_user(self, user_id):
         """
-        Register a new user in SnapTrade.
-
-        A new userSecret will be generated if a user with the same userId already exists
+        Deletes an existing user of provided user_id
         """
         endpoint_name = "delete_user"
 
-        data = dict(userId=userId, userSecret=userSecret)
-        query_params = self.prepare_query_params(endpoint_name)
-
-        return self._make_request(endpoint_name, query_params=query_params, data=data)
-
-    def generate_new_user_secret(self, userId):
-        """
-        Generate a new user secret for an existing user.
-
-        If an existing user with userId doesn't exist, one will be created
-        """
-        endpoint_name = "register_user"
-
-        data = dict(userId=userId)
-        query_params = self.prepare_query_params(endpoint_name)
-
-        return self._make_request(endpoint_name, query_params=query_params, data=data)
-
-    def get_user_login_redirect_uri(self, userId, userSecret):
-        endpoint_name = "user_login_redirect_uri"
-
-        query_params = self.prepare_query_params(endpoint_name)
-
-        data = dict(userId=userId, userSecret=userSecret)
-
-        return self._make_request(endpoint_name, query_params=query_params, data=data)
-
-    def get_all_holdings(self, userId, account_numbers=None):
-        endpoint_name = "holdings"
-
-        intial_query_params = {"userId":userId}
-
-        if account_numbers:
-            ",".join(account_numbers)
-            intial_query_params["accounts"] = accounts
-
-        query_params = self.prepare_query_params(endpoint_name, initial_params=intial_query_params)
+        initial_query_params = dict(userId=user_id)
+        query_params = self.prepare_query_params(endpoint_name, initial_query_params)
 
         return self._make_request(endpoint_name, query_params=query_params)
+
+    def get_user_login_redirect_uri(self, user_id, user_secret):
+        """Returns redirect uri for user to"""
+        endpoint_name = "user_login_redirect_uri"
+
+        initial_query_params = dict(userId=user_id, userSecret=user_secret)
+        query_params = self.prepare_query_params(
+            endpoint_name, initial_params=initial_query_params
+        )
+
+        return self._make_request(endpoint_name, query_params=query_params)
+
+    """Accounts details, holdings, activities, brokerage connection endpoints"""
+
+    def get_brokerage_connections(self, user_id, user_secret):
+        endpoint_name = "brokerage_authorizations"
+
+        initial_query_params = dict(userId=user_id, userSecret=user_secret)
+        query_params = self.prepare_query_params(
+            endpoint_name, initial_params=initial_query_params
+        )
+
+        return self._make_request(endpoint_name, query_params=query_params)
+
+    def get_brokerage_connection_by_id(
+        self, user_id, user_secret, brokerage_connection_id
+    ):
+        endpoint_name = "brokerage_authorization_by_id"
+
+        initial_query_params = dict(userId=user_id, userSecret=user_secret)
+        query_params = self.prepare_query_params(
+            endpoint_name, initial_params=initial_query_params
+        )
+
+        path_params = dict(brokerage_authorization_id=brokerage_connection_id)
+
+        return self._make_request(
+            endpoint_name, path_params=path_params, query_params=query_params
+        )
+
+    def delete_brokerage_connection(
+        self, user_id, user_secret, brokerage_connection_id
+    ):
+        endpoint_name = "delete_brokerage_authorization"
+
+        initial_query_params = dict(userId=user_id, userSecret=user_secret)
+        query_params = self.prepare_query_params(
+            endpoint_name, initial_params=initial_query_params
+        )
+
+        path_params = dict(brokerage_authorization_id=brokerage_connection_id)
+
+        return self._make_request(
+            endpoint_name, path_params=path_params, query_params=query_params
+        )
+
+    def get_accounts(self, user_id, user_secret):
+        endpoint_name = "accounts"
+        initial_query_params = dict(userId=user_id, userSecret=user_secret)
+        query_params = self.prepare_query_params(
+            endpoint_name, initial_params=initial_query_params
+        )
+
+        return self._make_request(endpoint_name, query_params=query_params)
+
+    def get_account_by_id(self, user_id, user_secret, account_id):
+        endpoint_name = "account_details"
+        initial_query_params = dict(userId=user_id, userSecret=user_secret)
+        query_params = self.prepare_query_params(
+            endpoint_name, initial_params=initial_query_params
+        )
+        path_params = dict(account_id=account_id)
+
+        return self._make_request(
+            endpoint_name, path_params=path_params, query_params=query_params
+        )
+
+    def get_account_balances(self, user_id, user_secret, account_id):
+        endpoint_name = "account_balances"
+        initial_query_params = dict(userId=user_id, userSecret=user_secret)
+        query_params = self.prepare_query_params(
+            endpoint_name, initial_params=initial_query_params
+        )
+        path_params = dict(account_id=account_id)
+
+        return self._make_request(
+            endpoint_name, path_params=path_params, query_params=query_params
+        )
+
+    def get_account_positions(self, user_id, user_secret, account_id):
+        endpoint_name = "account_positions"
+        initial_query_params = dict(userId=user_id, userSecret=user_secret)
+        query_params = self.prepare_query_params(
+            endpoint_name, initial_params=initial_query_params
+        )
+        path_params = dict(account_id=account_id)
+
+        return self._make_request(
+            endpoint_name, path_params=path_params, query_params=query_params
+        )
+
+    def get_account_holdings(self, user_id, user_secret, account_id):
+        endpoint_name = "account_holdings"
+        initial_query_params = dict(userId=user_id, userSecret=user_secret)
+        query_params = self.prepare_query_params(
+            endpoint_name, initial_params=initial_query_params
+        )
+        path_params = dict(account_id=account_id)
+
+        return self._make_request(
+            endpoint_name, path_params=path_params, query_params=query_params
+        )
+
+    def get_all_holdings(self, user_id, user_secret):
+        endpoint_name = "holdings"
+        initial_query_params = dict(userId=user_id, userSecret=user_secret)
+        query_params = self.prepare_query_params(
+            endpoint_name, initial_params=initial_query_params
+        )
+
+        return self._make_request(endpoint_name, query_params=query_params)
+
+    def get_activities(self, user_id, user_secret, start_date=None, end_date=None):
+        endpoint_name = "activities"
+
+        initial_query_params = dict(userId=user_id, userSecret=user_secret)
+
+        if start_date:
+            initial_query_params["startDate"] = start_date
+
+        if end_date:
+            initial_query_params["endDate"] = end_date
+
+        query_params = self.prepare_query_params(
+            endpoint_name, initial_params=initial_query_params
+        )
+
+        return self._make_request(endpoint_name, query_params=query_params)
+
+    "Reference data endpoints"
+
+    def get_brokerages(self):
+        endpoint_name = "brokerages"
+        query_params = self.prepare_query_params(endpoint_name)
+
+        return self._make_request(endpoint_name, query_params=query_params)
+
+    def get_currencies(self):
+        endpoint_name = "currencies"
+        query_params = self.prepare_query_params(endpoint_name)
+
+        return self._make_request(endpoint_name, query_params=query_params)
+
+    def get_all_currencies_exchange_rates(self):
+        endpoint_name = "currencies_rates"
+        query_params = self.prepare_query_params(endpoint_name)
+
+        return self._make_request(endpoint_name, query_params=query_params)
+
+    def get_currency_pair_exchange_rate(self, src_currency_code, dst_currency_code):
+        endpoint_name = "currency_pair_rate"
+        query_params = self.prepare_query_params(endpoint_name)
+        path_params = dict(currency_pair=f"{src_currency_code}-{dst_currency_code}")
+
+        return self._make_request(
+            endpoint_name, path_params=path_params, query_params=query_params
+        )
+
+    def search_symbols_by_name(self, substring):
+        endpoint_name = "symbol_search"
+        query_params = self.prepare_query_params(endpoint_name)
+        data = dict(substring=substring)
+
+        return self._make_request(endpoint_name, data=data, query_params=query_params)
+
+    def get_symbol_details_by_universal_symbol_id(self, symbol_id):
+        endpoint_name = "symbol_by_id"
+        query_params = self.prepare_query_params(endpoint_name)
+        path_params = dict(symbol_id=symbol_id)
+
+        return self._make_request(
+            endpoint_name, path_params=path_params, query_params=query_params
+        )
+
+    def get_symbol_details_by_ticker(self, ticker):
+        endpoint_name = "symbol_by_ticker"
+        query_params = self.prepare_query_params(endpoint_name)
+        path_params = dict(ticker=ticker)
+
+        return self._make_request(
+            endpoint_name, path_params=path_params, query_params=query_params
+        )
+
+    """Trading endpoints"""
