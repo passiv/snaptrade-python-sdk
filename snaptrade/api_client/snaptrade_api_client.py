@@ -6,7 +6,6 @@ from base64 import b64encode
 from hashlib import sha256
 from urllib.parse import urlencode
 from snaptrade.utils import SnapTradeUtils
-from snaptrade.models import ErrorMessage
 from requests.exceptions import ConnectionError
 
 
@@ -113,12 +112,13 @@ class SnapTradeAPIClient:
                     endpoint, headers=headers, params=query_params, json=data
                 )
         except ConnectionError:
+            error_message = dict(
+                status_code=502, detail="Failed to connect to api server", code=0000
+            )
             if self.return_response_as_dict:
-                return dict(
-                    status_code=502, detail="Failed to connect to api server", code=0000
-                )
+                return error_message
             else:
-                return ErrorMessage(response=None, connection_error=True)
+                return SnapTradeUtils.convert_to_simple_namespace(error_message)
 
         if self.debug_response:
             return response
@@ -131,10 +131,7 @@ class SnapTradeAPIClient:
         if self.return_response_as_dict:
             return data
         else:
-            if response.status_code not in [200, 204]:
-                return ErrorMessage(response)
-            else:
-                return SnapTradeUtils.convert_to_simple_namespace(data)
+            return SnapTradeUtils.convert_to_simple_namespace(data)
 
     """Gets API Status"""
 
@@ -287,6 +284,23 @@ class SnapTradeAPIClient:
     def get_all_holdings(self, user_id, user_secret):
         endpoint_name = "holdings"
         initial_query_params = dict(userId=user_id, userSecret=user_secret)
+        query_params = self.prepare_query_params(
+            endpoint_name, initial_params=initial_query_params
+        )
+
+        return self._make_request(endpoint_name, query_params=query_params)
+
+    def get_activities(self, user_id, user_secret, start_date=None, end_date=None):
+        endpoint_name = "activities"
+
+        initial_query_params = dict(userId=user_id, userSecret=user_secret)
+
+        if start_date:
+            initial_query_params["startDate"] = start_date
+
+        if end_date:
+            initial_query_params["endDate"] = end_date
+
         query_params = self.prepare_query_params(
             endpoint_name, initial_params=initial_query_params
         )
