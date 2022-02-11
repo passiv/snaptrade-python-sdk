@@ -95,6 +95,8 @@ class SnapTradeAPIClient:
 
         method = self.endpoints[endpoint_name]["method"]
 
+        response = None
+
         try:
             if method == "post":
                 response = requests.post(
@@ -121,13 +123,18 @@ class SnapTradeAPIClient:
         if self.debug_response:
             return response
 
+        if response.content:
+            data = response.json()
+        else:
+            data = dict(status_code=response.status_code, detail="No content returned")
+
         if self.return_response_as_dict:
-            return response.json()
+            return data
         else:
             if response.status_code not in [200, 204]:
                 return ErrorMessage(response)
             else:
-                return SnapTradeUtils.convert_to_simple_namespace(response.json())
+                return SnapTradeUtils.convert_to_simple_namespace(data)
 
     """Gets API Status"""
 
@@ -139,7 +146,7 @@ class SnapTradeAPIClient:
 
         return self._make_request(endpoint_name, query_params=query_params)
 
-    """User registion, auth and deletion"""
+    """User registration, auth and deletion"""
 
     def register_user(self, user_id):
         """
@@ -176,10 +183,109 @@ class SnapTradeAPIClient:
 
         return self._make_request(endpoint_name, query_params=query_params)
 
-    """Accounts details, account holdings and account activities"""
+    """Accounts details, holdings, activities, brokerage connection endpoints"""
+
+    def get_brokerage_connections(self, user_id, user_secret):
+        endpoint_name = "brokerage_authorizations"
+
+        initial_query_params = dict(userId=user_id, userSecret=user_secret)
+        query_params = self.prepare_query_params(
+            endpoint_name, initial_params=initial_query_params
+        )
+
+        return self._make_request(endpoint_name, query_params=query_params)
+
+    def get_brokerage_connection_by_id(
+        self, user_id, user_secret, brokerage_connection_id
+    ):
+        endpoint_name = "brokerage_authorization_by_id"
+
+        initial_query_params = dict(userId=user_id, userSecret=user_secret)
+        query_params = self.prepare_query_params(
+            endpoint_name, initial_params=initial_query_params
+        )
+
+        path_params = dict(brokerage_authorization_id=brokerage_connection_id)
+
+        return self._make_request(
+            endpoint_name, path_params=path_params, query_params=query_params
+        )
+
+    def delete_brokerage_connection(
+        self, user_id, user_secret, brokerage_connection_id
+    ):
+        endpoint_name = "delete_brokerage_authorization"
+
+        initial_query_params = dict(userId=user_id, userSecret=user_secret)
+        query_params = self.prepare_query_params(
+            endpoint_name, initial_params=initial_query_params
+        )
+
+        path_params = dict(brokerage_authorization_id=brokerage_connection_id)
+
+        return self._make_request(
+            endpoint_name, path_params=path_params, query_params=query_params
+        )
 
     def get_accounts(self, user_id, user_secret):
         endpoint_name = "accounts"
+        initial_query_params = dict(userId=user_id, userSecret=user_secret)
+        query_params = self.prepare_query_params(
+            endpoint_name, initial_params=initial_query_params
+        )
+
+        return self._make_request(endpoint_name, query_params=query_params)
+
+    def get_account_by_id(self, user_id, user_secret, account_id):
+        endpoint_name = "account_details"
+        initial_query_params = dict(userId=user_id, userSecret=user_secret)
+        query_params = self.prepare_query_params(
+            endpoint_name, initial_params=initial_query_params
+        )
+        path_params = dict(account_id=account_id)
+
+        return self._make_request(
+            endpoint_name, path_params=path_params, query_params=query_params
+        )
+
+    def get_account_balances(self, user_id, user_secret, account_id):
+        endpoint_name = "account_balances"
+        initial_query_params = dict(userId=user_id, userSecret=user_secret)
+        query_params = self.prepare_query_params(
+            endpoint_name, initial_params=initial_query_params
+        )
+        path_params = dict(account_id=account_id)
+
+        return self._make_request(
+            endpoint_name, path_params=path_params, query_params=query_params
+        )
+
+    def get_account_positions(self, user_id, user_secret, account_id):
+        endpoint_name = "account_positions"
+        initial_query_params = dict(userId=user_id, userSecret=user_secret)
+        query_params = self.prepare_query_params(
+            endpoint_name, initial_params=initial_query_params
+        )
+        path_params = dict(account_id=account_id)
+
+        return self._make_request(
+            endpoint_name, path_params=path_params, query_params=query_params
+        )
+
+    def get_account_holdings(self, user_id, user_secret, account_id):
+        endpoint_name = "account_holdings"
+        initial_query_params = dict(userId=user_id, userSecret=user_secret)
+        query_params = self.prepare_query_params(
+            endpoint_name, initial_params=initial_query_params
+        )
+        path_params = dict(account_id=account_id)
+
+        return self._make_request(
+            endpoint_name, path_params=path_params, query_params=query_params
+        )
+
+    def get_all_holdings(self, user_id, user_secret):
+        endpoint_name = "holdings"
         initial_query_params = dict(userId=user_id, userSecret=user_secret)
         query_params = self.prepare_query_params(
             endpoint_name, initial_params=initial_query_params
