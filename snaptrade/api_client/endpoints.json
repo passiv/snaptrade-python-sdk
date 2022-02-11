@@ -58,6 +58,17 @@
             "userSecret"
         ]
     },
+    "activities": {
+        "endpoint": "activities",
+        "method": "get",
+        "path_params": [],
+        "validation_params": [
+            "clientId",
+            "timestamp",
+            "userId",
+            "userSecret"
+        ]
+    },
     "api_status": {
         "endpoint": "",
         "method": "get",
