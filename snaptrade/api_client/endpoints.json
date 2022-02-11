@@ -54,6 +54,38 @@
         "validation_params": [
             "clientId",
             "timestamp",
+            "userId",
+            "userSecret"
+        ]
+    },
+    "activities": {
+        "endpoint": "activities",
+        "method": "get",
+        "path_params": [],
+        "validation_params": [
+            "clientId",
+            "timestamp",
+            "userId",
+            "userSecret"
+        ]
+    },
+    "api_status": {
+        "endpoint": "",
+        "method": "get",
+        "path_params": [],
+        "validation_params": [
+            "clientId",
+            "timestamp",
+            "userId"
+        ]
+    },
+    "brokerage_authorization_by_id": {
+        "endpoint": "authorizations/%(brokerage_authorization_id)s",
+        "method": "get",
+        "path_params": [],
+        "validation_params": [
+            "clientId",
+            "timestamp",
             "userId"
         ]
     },
@@ -125,6 +157,16 @@
             "timestamp"
         ]
     },
+    "delete_brokerage_authorization": {
+        "endpoint": "authorizations/%(brokerage_authorization_id)s",
+        "method": "delete",
+        "path_params": [],
+        "validation_params": [
+            "clientId",
+            "timestamp",
+            "userId"
+        ]
+    },
     "delete_model_asset_class": {
         "endpoint": "modelAssetClass/%(model_asset_class_id)s",
         "method": "delete",
@@ -185,15 +227,6 @@
             "timestamp",
             "accounts",
             "userId"
-        ]
-    },
-    "user_login_redirect_uri": {
-        "endpoint": "snapTrade/login",
-        "method": "post",
-        "path_params": [],
-        "validation_params": [
-            "clientId",
-            "timestamp"
         ]
     },
     "model_asset_class": {
@@ -542,6 +575,15 @@
             "clientId",
             "timestamp",
             "userId"
+        ]
+    },
+    "user_login_redirect_uri": {
+        "endpoint": "snapTrade/login",
+        "method": "post",
+        "path_params": [],
+        "validation_params": [
+            "clientId",
+            "timestamp"
         ]
     }
 }
