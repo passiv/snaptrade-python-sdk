@@ -18,11 +18,11 @@ api_status = client.api_status()
 
 registered_user_data = client.register_user(user_id)
 
-redirect_uri = client.get_user_login_redirect_uri
+redirect_uri = client.get_user_login_redirect_uri(user_id, user_secret)
 
 account_holdings_data = client.get_all_holdings(user_id, user_secret)
 
-client.delete_user()
+client.delete_user(user_id)
 
 """
 
