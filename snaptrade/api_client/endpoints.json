@@ -35,6 +35,18 @@
             "userId"
         ]
     },
+    "account_orders_history": {
+        "endpoint": "accounts/%(account_id)s/orders",
+        "method": "get",
+        "path_params": [
+            "account_id"
+        ],
+        "validation_params": [
+            "clientId",
+            "timestamp",
+            "userId"
+        ]
+    },
     "account_positions": {
         "endpoint": "accounts/%(account_id)s/positions",
         "method": "get",
@@ -106,6 +118,19 @@
         "validation_params": [
             "clientId",
             "timestamp"
+        ]
+    },
+    "cancel_order": {
+        "endpoint": "accounts/%(account_id)s/orders/cancel",
+        "method": "post",
+        "path_params": [
+            "account_id"
+        ],
+        "validation_params": [
+            "clientId",
+            "timestamp",
+            "userID",
+            "userSecret"
         ]
     },
     "create_model_asset_class": {
@@ -265,6 +290,19 @@
         "path_params": [],
         "validation_params": [
             "clientId"
+        ]
+    },
+    "place_order": {
+        "endpoint": "trade/%(trade_id)s",
+        "method": "post",
+        "path_params": [
+            "trade_id"
+        ],
+        "validation_params": [
+            "clientId",
+            "timestamp",
+            "userID",
+            "userSecret"
         ]
     },
     "portfolio_group_accounts": {
@@ -524,6 +562,15 @@
             "timestamp"
         ]
     },
+    "symbol_quotes": {
+        "endpoint": "accounts/%(account_id)s/quotes",
+        "method": "get",
+        "path_params": [],
+        "validation_params": [
+            "clientId",
+            "timestamp"
+        ]
+    },
     "symbol_search": {
         "endpoint": "symbols",
         "method": "post",
@@ -531,6 +578,17 @@
         "validation_params": [
             "clientId",
             "timestamp"
+        ]
+    },
+    "trade_impact": {
+        "endpoint": "trade/impact",
+        "method": "post",
+        "path_params": [],
+        "validation_params": [
+            "clientId",
+            "timestamp",
+            "userID",
+            "userSecret"
         ]
     },
     "update_account_info": {
