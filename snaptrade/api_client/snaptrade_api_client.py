@@ -133,7 +133,9 @@ class SnapTradeAPIClient:
         else:
             return SnapTradeUtils.convert_to_simple_namespace(data)
 
-    """Gets API Status"""
+    """
+    Gets API Status
+    """
 
     def api_status(self):
         """Gets Snaptrade API status"""
@@ -143,7 +145,9 @@ class SnapTradeAPIClient:
 
         return self._make_request(endpoint_name, query_params=query_params)
 
-    """User registration, auth and deletion"""
+    """
+    User registration, auth and deletion
+    """
 
     def register_user(self, user_id):
         """
@@ -159,9 +163,8 @@ class SnapTradeAPIClient:
         return self._make_request(endpoint_name, query_params=query_params, data=data)
 
     def delete_user(self, user_id):
-        """
-        Deletes an existing user of provided user_id
-        """
+        """Deletes an existing user of provided user_id"""
+
         endpoint_name = "delete_user"
 
         initial_query_params = dict(userId=user_id)
@@ -180,7 +183,9 @@ class SnapTradeAPIClient:
 
         return self._make_request(endpoint_name, query_params=query_params)
 
-    """Accounts details, holdings, activities, brokerage connection endpoints"""
+    """
+    Accounts details, holdings, activities, brokerage connection endpoints
+    """
 
     def get_brokerage_connections(self, user_id, user_secret):
         endpoint_name = "brokerage_authorizations"
@@ -307,7 +312,9 @@ class SnapTradeAPIClient:
 
         return self._make_request(endpoint_name, query_params=query_params)
 
-    "Reference data endpoints"
+    """
+    Reference data endpoints
+    """
 
     def get_brokerages(self):
         endpoint_name = "brokerages"
@@ -361,4 +368,117 @@ class SnapTradeAPIClient:
             endpoint_name, path_params=path_params, query_params=query_params
         )
 
-    """Trading endpoints"""
+    """
+    Trading endpoints
+    """
+
+    def get_market_quotes(
+        self, user_id, user_secret, account_id, symbols, search_by_ticker=False
+    ):
+        endpoint_name = "symbol_quotes"
+
+        symbols_string = ",".join(symbols)
+
+        initial_query_params = dict(
+            userId=user_id,
+            userSecret=user_secret,
+            symbols=symbols_string,
+            use_ticker=search_by_ticker,
+        )
+        query_params = self.prepare_query_params(endpoint_name, initial_query_params)
+        path_params = dict(account_id=account_id)
+
+        return self._make_request(
+            endpoint_name, path_params=path_params, query_params=query_params
+        )
+
+    def get_account_order_history(
+        self, user_id, user_secret, account_id, state=None, days=None
+    ):
+        endpoint_name = "account_orders_history"
+
+        initial_query_params = dict(userId=user_id, userSecret=user_secret)
+
+        if state:
+            initial_query_params["state"] = state
+
+        if days:
+            initial_query_params["days"] = days
+
+        query_params = self.prepare_query_params(
+            endpoint_name, initial_params=initial_query_params
+        )
+        path_params = dict(account_id=account_id)
+
+        return self._make_request(
+            endpoint_name, path_params=path_params, query_params=query_params
+        )
+
+    def get_trade_impact(
+        self,
+        user_id,
+        user_secret,
+        account_id,
+        action,
+        universal_symbol_id,
+        order_type,
+        time_in_force,
+        units,
+        price=None,
+    ):
+        endpoint_name = "trade_impact"
+
+        initial_query_params = dict(userId=user_id, userSecret=user_secret)
+
+        query_params = self.prepare_query_params(
+            endpoint_name, initial_params=initial_query_params
+        )
+
+        if time_in_force.title() == "Day":
+            time_in_force = time_in_force.title()
+
+        trade_data = {
+            "account_id": account_id,
+            "action": action.title(),
+            "universal_symbol_id": universal_symbol_id,
+            "order_type": order_type,
+            "time_in_force": time_in_force,
+            "price": price,
+            "units": units,
+        }
+
+        return self._make_request(
+            endpoint_name, data=trade_data, query_params=query_params
+        )
+
+    def place_order(self, user_id, user_secret, trade_id):
+        endpoint_name = "place_trade"
+
+        initial_query_params = dict(userId=user_id, userSecret=user_secret)
+
+        query_params = self.prepare_query_params(
+            endpoint_name, initial_params=initial_query_params
+        )
+
+        path_params = dict(trade_id=trade_id)
+
+        return self._make_request(
+            endpoint_name, path_params=path_params, query_params=query_params
+        )
+
+    def cancel_order(self, user_id, user_secret, account_id, brokerage_order_id):
+        endpoint_name = "cancel_order"
+
+        initial_query_params = dict(userId=user_id, userSecret=user_secret)
+
+        query_params = self.prepare_query_params(
+            endpoint_name, initial_params=initial_query_params
+        )
+
+        path_params = dict(account_id=account_id)
+
+        data = dict(brokerage_order_id=brokerage_order_id)
+
+        return self._make_request(
+            endpoint_name, path_params=path_params, query_params=query_params, data=data
+        )
