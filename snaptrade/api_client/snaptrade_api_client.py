@@ -452,7 +452,7 @@ class SnapTradeAPIClient:
         )
 
     def place_order(self, user_id, user_secret, trade_id):
-        endpoint_name = "place_trade"
+        endpoint_name = "place_order"
 
         initial_query_params = dict(userId=user_id, userSecret=user_secret)
 
