@@ -2,7 +2,7 @@ from types import SimpleNamespace
 import time
 from datetime import datetime, timezone
 import json
-
+from importlib.resources import open_text
 
 class SnapTradeUtils:
     @classmethod
@@ -18,7 +18,7 @@ class SnapTradeUtils:
 
     @classmethod
     def get_api_endpoints(cls):
-        with open("./snaptrade/api_client/endpoints.json", "r") as f:
+        with open_text("snaptrade.api_client", "endpoints.json") as f:
             return json.load(f)
 
     @classmethod
