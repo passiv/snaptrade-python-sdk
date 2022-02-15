@@ -61,6 +61,11 @@ Check out the documentation below for making requests to other SnapTrade API end
 * [Reporting Endpoints]
 * [Trading Endpoints]
 
+---
+## License & copyrights
+
+Licensed under [Apache License 2.0][2]. 
+
 
 [1]: https://docs.snaptrade.com/reference/getting-started
 [contact]: mailto:api@snaptrade.com
@@ -70,3 +75,4 @@ Check out the documentation below for making requests to other SnapTrade API end
 [Reference Data Endpoints]: docs/reference-data-endpoints.md
 [Reporting Endpoints]: docs/reporting-endpoints.md
 [Trading Endpoints]: docs/trading-endpoints.md
+[2]: LICENSE
