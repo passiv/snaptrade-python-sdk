@@ -5,6 +5,18 @@ A SnapTrade python client library to help you make requests to the [SnapTrade AP
 If you need help or have any questions, send us an email at [api@snaptrade.com][contact].
 
 ---
+## Requirements and Installation 
+### Python version requirements
+* Python 3.6 or later
+
+### Installation
+```
+pip install snaptrade
+```
+* It is recommended that you install this library on a virtual environment. You can find out more about this in the following link: 
+[Installing using pip and virtual environments]
+
+---
 ## SnapTradeAPIClient
 Before getting started, you will need a **clientID** and a **consumerKey**. If you don't have one, please send us an email 
 to get a new one. 
@@ -66,7 +78,6 @@ Check out the documentation below for making requests to other SnapTrade API end
 
 Licensed under [Apache License 2.0][2]. 
 
-
 [1]: https://docs.snaptrade.com/reference/getting-started
 [contact]: mailto:api@snaptrade.com
 [Account Information Endpoints]: docs/account-information-endpoints.md
@@ -75,4 +86,5 @@ Licensed under [Apache License 2.0][2].
 [Reference Data Endpoints]: docs/reference-data-endpoints.md
 [Reporting Endpoints]: docs/reporting-endpoints.md
 [Trading Endpoints]: docs/trading-endpoints.md
+[Installing using pip and virtual environments]: https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments/
 [2]: LICENSE
