@@ -2,7 +2,7 @@
 
 #### GET v1/accounts/{accountId}/quotes
 ```
-from snaptrade.snaptrade_api_client import SnapTradeAPIClient
+from snaptrade.api_client import SnapTradeAPIClient
 
 client = SnapTradeAPIClient(clientID, consumerKey)
 
@@ -16,7 +16,7 @@ quotes = client.get_market_quotes(user_id, user_secret, symbols, search_by_ticke
 
 #### GET v1/accounts/{accountId}/orders
 ```
-from snaptrade.snaptrade_api_client import SnapTradeAPIClient
+from snaptrade.api_client import SnapTradeAPIClient
 
 client = SnapTradeAPIClient(clientID, consumerKey)
 
@@ -32,7 +32,7 @@ quotes = client.get_account_order_history(user_id, user_secret, account_id, stat
 
 * Note: Endpoint needs to be called before placing an order to get id
 ```
-from snaptrade.snaptrade_api_client import SnapTradeAPIClient
+from snaptrade.api_client import SnapTradeAPIClient
 
 client = SnapTradeAPIClient(clientID, consumerKey)
 
@@ -60,7 +60,7 @@ trade_impact = client.get_trade_impact(
 
 #### POST v1/trade/{tradeId}
 ```
-from snaptrade.snaptrade_api_client import SnapTradeAPIClient
+from snaptrade.api_client import SnapTradeAPIClient
 
 client = SnapTradeAPIClient(clientID, consumerKey)
 
@@ -73,7 +73,7 @@ order_response = client.place_order(user_id, user_secret, trade_id)
 
 #### POST v1/accounts/{accountId}/orders/cancel
 ```
-from snaptrade.snaptrade_api_client import SnapTradeAPIClient
+from snaptrade.api_client import SnapTradeAPIClient
 
 client = SnapTradeAPIClient(clientID, consumerKey)
 

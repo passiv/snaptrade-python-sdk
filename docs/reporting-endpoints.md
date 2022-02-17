@@ -3,7 +3,7 @@
 #### GET v1/activities
 
 ```
-from snaptrade.snaptrade_api_client import SnapTradeAPIClient
+from snaptrade.api_client import SnapTradeAPIClient
 
 client = SnapTradeAPIClient(clientID, consumerKey)
 

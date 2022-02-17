@@ -3,7 +3,7 @@
 #### POST v1/snapTrade/registerUser
 
 ```
-from snaptrade.snaptrade_api_client import SnapTradeAPIClient
+from snaptrade.api_client import SnapTradeAPIClient
 
 client = SnapTradeAPIClient(clientID, consumerKey)
 
@@ -17,7 +17,7 @@ user_secret = register_response.get("userSecret")
 #### POST v1/snapTrade/login
 
 ```
-from snaptrade.snaptrade_api_client import SnapTradeAPIClient
+from snaptrade.api_client import SnapTradeAPIClient
 
 client = SnapTradeAPIClient(clientID, consumerKey)
 
@@ -31,7 +31,7 @@ redirect_uri = redirect_uri_response.get("redirectURI")
 #### POST v1/snapTrade/deleteUser
 
 ```
-from snaptrade.snaptrade_api_client import SnapTradeAPIClient
+from snaptrade.api_client import SnapTradeAPIClient
 
 client = SnapTradeAPIClient(clientID, consumerKey)
 

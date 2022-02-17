@@ -2,7 +2,7 @@
 
 #### GET v1/brokerages
 ```
-from snaptrade.snaptrade_api_client import SnapTradeAPIClient
+from snaptrade.api_client import SnapTradeAPIClient
 
 client = SnapTradeAPIClient(clientID, consumerKey)
 
@@ -14,7 +14,7 @@ brokerages = client.get_brokerages()
 
 #### GET v1/currencies
 ```
-from snaptrade.snaptrade_api_client import SnapTradeAPIClient
+from snaptrade.api_client import SnapTradeAPIClient
 
 client = SnapTradeAPIClient(clientID, consumerKey)
 
@@ -25,7 +25,7 @@ currencies = client.get_currencies()
 
 #### GET v1/currencies/rates
 ```
-from snaptrade.snaptrade_api_client import SnapTradeAPIClient
+from snaptrade.api_client import SnapTradeAPIClient
 
 client = SnapTradeAPIClient(clientID, consumerKey)
 
@@ -38,7 +38,7 @@ currencies = client.get_all_currencies_exchange_rates()
 
 eg. If converting CAD into USD `src_currency_code=CAD` and `dst_currency_code=USD`
 ```
-from snaptrade.snaptrade_api_client import SnapTradeAPIClient
+from snaptrade.api_client import SnapTradeAPIClient
 
 client = SnapTradeAPIClient(clientID, consumerKey)
 
@@ -53,7 +53,7 @@ currencies = client.get_currency_pair_exchange_rate(src_currency_code, dst_curre
 #### POST v1/symbols
 
 ```
-from snaptrade.snaptrade_api_client import SnapTradeAPIClient
+from snaptrade.api_client import SnapTradeAPIClient
 
 client = SnapTradeAPIClient(clientID, consumerKey)
 
@@ -67,7 +67,7 @@ symbols = client.search_symbols_by_name(substring)
 #### GET v1/symbols/{symbolId}
 
 ```
-from snaptrade.snaptrade_api_client import SnapTradeAPIClient
+from snaptrade.api_client import SnapTradeAPIClient
 
 client = SnapTradeAPIClient(clientID, consumerKey)
 
@@ -80,7 +80,7 @@ symbols = client.get_symbol_details_by_universal_symbol_id(symbol_id)
 #### GET v1/symbols/{ticker}
 
 ```
-from snaptrade.snaptrade_api_client import SnapTradeAPIClient
+from snaptrade.api_client import SnapTradeAPIClient
 
 client = SnapTradeAPIClient(clientID, consumerKey)
 

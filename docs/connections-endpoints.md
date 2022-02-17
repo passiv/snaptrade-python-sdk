@@ -3,7 +3,7 @@
 #### GET v1/authorizations
 
 ```
-from snaptrade.snaptrade_api_client import SnapTradeAPIClient
+from snaptrade.api_client import SnapTradeAPIClient
 
 client = SnapTradeAPIClient(clientID, consumerKey)
 
@@ -14,7 +14,7 @@ connections = client.get_brokerage_connections(user_id, user_secret)
 
 #### GET v1/authorizations/{authorizationId}
 ```
-from snaptrade.snaptrade_api_client import SnapTradeAPIClient
+from snaptrade.api_client import SnapTradeAPIClient
 
 client = SnapTradeAPIClient(clientID, consumerKey)
 
@@ -25,7 +25,7 @@ connections = client.get_brokerage_connection_by_id(user_id, user_secret, broker
 
 #### DELETE v1/authorizations/{authorizationId}
 ```
-from snaptrade.snaptrade_api_client import SnapTradeAPIClient
+from snaptrade.api_client import SnapTradeAPIClient
 
 client = SnapTradeAPIClient(clientID, consumerKey)
 
