@@ -32,7 +32,7 @@ The code block belows shows you to initialize a SnapTradeAPIClient and how to ma
 Your consumerKey should always remain a secret! Never hard code it! 
 """ 
 
-from snaptrade.api_client.snaptrade_api_client import SnapTradeAPIClient
+from snaptrade.api_client import SnapTradeAPIClient
  
 # 1) Initialize a client with your clientID and consumerKey. 
 client = SnapTradeAPIClient(clientID, consumerKey)
