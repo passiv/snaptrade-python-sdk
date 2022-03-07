@@ -292,6 +292,17 @@
             "clientId"
         ]
     },
+    "performance": {
+        "endpoint": "performance/custom",
+        "method": "get",
+        "path_params": [],
+        "validation_params": [
+            "clientId",
+            "timestamp",
+            "userId",
+            "userSecret"
+        ]
+    },
     "place_order": {
         "endpoint": "trade/%(trade_id)s",
         "method": "post",

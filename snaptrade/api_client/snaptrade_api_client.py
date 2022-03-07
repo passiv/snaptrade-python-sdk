@@ -184,7 +184,7 @@ class SnapTradeAPIClient:
         return self._make_request(endpoint_name, query_params=query_params)
 
     """
-    Accounts details, holdings, activities, brokerage connection endpoints
+    Accounts details, holdings, brokerage connection endpoints
     """
 
     def get_brokerage_connections(self, user_id, user_secret):
@@ -295,6 +295,10 @@ class SnapTradeAPIClient:
 
         return self._make_request(endpoint_name, query_params=query_params)
 
+    """
+    Reporting endpoints: activities, performance
+    """
+
     def get_activities(self, user_id, user_secret, start_date=None, end_date=None):
         endpoint_name = "activities"
 
@@ -305,6 +309,23 @@ class SnapTradeAPIClient:
 
         if end_date:
             initial_query_params["endDate"] = end_date
+
+        query_params = self.prepare_query_params(
+            endpoint_name, initial_params=initial_query_params
+        )
+
+        return self._make_request(endpoint_name, query_params=query_params)
+
+    def get_performance_custom(self, user_id, user_secret, start_date, end_date, frequency=None, accountIDs=None):
+        endpoint_name = "performance"
+
+        initial_query_params = dict(userId=user_id, userSecret=user_secret, startDate=start_date, end_date=end_date)
+
+        if frequency:
+            initial_query_params["frequency"] = frequency
+
+        if accountIDs:  # Should be account IDs seprated by commas
+            initial_query_params["accounts"] = accountIDs
 
         query_params = self.prepare_query_params(
             endpoint_name, initial_params=initial_query_params
