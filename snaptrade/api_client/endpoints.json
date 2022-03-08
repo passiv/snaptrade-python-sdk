@@ -221,9 +221,9 @@
             "timestamp"
         ]
     },
-    "exchange": {
+    "exchanges": {
         "endpoint": "exchanges",
-        "method": "post",
+        "method": "get",
         "path_params": [],
         "validation_params": [
             "clientId",
