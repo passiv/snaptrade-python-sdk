@@ -48,7 +48,20 @@ dst_currency_code = ""  # Currency to convert to
 currencies = client.get_currency_pair_exchange_rate(src_currency_code, dst_currency_code)
 ```
 
-### 5) Search symbols with provided string
+### 5) Get list of stock exchanges supported by SnapTrade
+
+#### GET v1/exchanges
+
+```
+from snaptrade.api_client import SnapTradeAPIClient
+
+client = SnapTradeAPIClient(clientID, consumerKey)
+
+exchanges = client.get_exchanges()
+```
+
+
+### 6) Search symbols with provided string
 
 #### POST v1/symbols
 
@@ -62,7 +75,7 @@ symbols = client.search_symbols_by_name(substring)
 ```
 
 
-### 6) Get symbol details using symbol id
+### 7) Get symbol details using symbol id
 
 #### GET v1/symbols/{symbolId}
 
@@ -75,7 +88,7 @@ symbol_id = ""  # symbol_id should be a UUID
 symbols = client.get_symbol_details_by_universal_symbol_id(symbol_id)
 ```
 
-### 6) Get symbol details using symbol ticker
+### 8) Get symbol details using symbol ticker
 
 #### GET v1/symbols/{ticker}
 
