@@ -5,7 +5,7 @@ with open("README.MD", "r") as f:
 
 setup(
     name="snaptrade",
-    version="0.0.2",
+    version="0.0.3",
     description="A Python implementation of SnapTrade API client library",
     author="SnapTrade Dev Team",
     author_email="support@snaptrade.com",
