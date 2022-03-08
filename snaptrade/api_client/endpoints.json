@@ -221,6 +221,15 @@
             "timestamp"
         ]
     },
+    "exchange": {
+        "endpoint": "exchanges",
+        "method": "post",
+        "path_params": [],
+        "validation_params": [
+            "clientId",
+            "timestamp"
+        ]
+    },
     "get_model_portfolio": {
         "endpoint": "modelPortfolio/%(model_portfolio_id)s",
         "method": "get",
