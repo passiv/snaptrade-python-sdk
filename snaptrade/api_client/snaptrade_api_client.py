@@ -100,7 +100,10 @@ class SnapTradeAPIClient:
         try:
             if method == "post":
                 response = requests.post(
-                    endpoint, headers=headers, params=query_params, json=data,
+                    endpoint,
+                    headers=headers,
+                    params=query_params,
+                    json=data,
                 )
             elif method == "get":
                 response = requests.get(endpoint, headers=headers, params=query_params)
@@ -173,7 +176,14 @@ class SnapTradeAPIClient:
 
         return self._make_request(endpoint_name, query_params=query_params)
 
-    def get_user_login_redirect_uri(self, user_id, user_secret, broker=None, immediate_redirect=False, custom_redirect=None):
+    def get_user_login_redirect_uri(
+        self,
+        user_id,
+        user_secret,
+        broker=None,
+        immediate_redirect=False,
+        custom_redirect=None,
+    ):
         """Returns redirect uri for user to"""
         endpoint_name = "user_login_redirect_uri"
 
@@ -325,10 +335,23 @@ class SnapTradeAPIClient:
 
         return self._make_request(endpoint_name, query_params=query_params)
 
-    def get_performance_custom(self, user_id, user_secret, start_date, end_date, frequency=None, accountIDs=None):
+    def get_performance_custom(
+        self,
+        user_id,
+        user_secret,
+        start_date,
+        end_date,
+        frequency=None,
+        accountIDs=None,
+    ):
         endpoint_name = "performance"
 
-        initial_query_params = dict(userId=user_id, userSecret=user_secret, startDate=start_date, end_date=end_date)
+        initial_query_params = dict(
+            userId=user_id,
+            userSecret=user_secret,
+            startDate=start_date,
+            end_date=end_date,
+        )
 
         if frequency:
             initial_query_params["frequency"] = frequency

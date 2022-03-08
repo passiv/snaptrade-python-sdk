@@ -4,6 +4,7 @@ from datetime import datetime, timezone
 import json
 from importlib.resources import open_text
 
+
 class SnapTradeUtils:
     @classmethod
     def convert_to_simple_namespace(cls, data):
