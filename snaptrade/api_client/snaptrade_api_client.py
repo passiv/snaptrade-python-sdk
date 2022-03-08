@@ -11,7 +11,8 @@ from requests.exceptions import ConnectionError
 
 class SnapTradeAPIClient:
     api_version = "v1/"
-    base_url = "https://api.snaptrade.com/api/"
+    # base_url = "https://api.snaptrade.com/api/"
+    base_url = "https://api.staging.passiv.com/api/"
     endpoints = SnapTradeUtils.get_api_endpoints()
 
     def __init__(
@@ -99,7 +100,7 @@ class SnapTradeAPIClient:
         try:
             if method == "post":
                 response = requests.post(
-                    endpoint, headers=headers, params=query_params, json=data
+                    endpoint, headers=headers, params=query_params, json=data,
                 )
             elif method == "get":
                 response = requests.get(endpoint, headers=headers, params=query_params)
@@ -172,7 +173,7 @@ class SnapTradeAPIClient:
 
         return self._make_request(endpoint_name, query_params=query_params)
 
-    def get_user_login_redirect_uri(self, user_id, user_secret):
+    def get_user_login_redirect_uri(self, user_id, user_secret, broker=None, immediate_redirect=False, custom_redirect=None):
         """Returns redirect uri for user to"""
         endpoint_name = "user_login_redirect_uri"
 
@@ -181,7 +182,15 @@ class SnapTradeAPIClient:
             endpoint_name, initial_params=initial_query_params
         )
 
-        return self._make_request(endpoint_name, query_params=query_params)
+        data = dict()
+        if broker:
+            data["broker"] = broker
+        if immediate_redirect:
+            data["immediateRedirect"] = True
+        if custom_redirect:
+            data["customRedirect"] = custom_redirect
+
+        return self._make_request(endpoint_name, data=data, query_params=query_params)
 
     """
     Accounts details, holdings, brokerage connection endpoints
@@ -339,6 +348,12 @@ class SnapTradeAPIClient:
 
     def get_brokerages(self):
         endpoint_name = "brokerages"
+        query_params = self.prepare_query_params(endpoint_name)
+
+        return self._make_request(endpoint_name, query_params=query_params)
+
+    def get_exchanges(self):
+        endpoint_name = "exchanges"
         query_params = self.prepare_query_params(endpoint_name)
 
         return self._make_request(endpoint_name, query_params=query_params)
