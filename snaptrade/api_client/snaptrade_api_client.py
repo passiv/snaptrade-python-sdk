@@ -199,6 +199,9 @@ class SnapTradeAPIClient:
         if custom_redirect:
             data["customRedirect"] = custom_redirect
 
+        if not data:
+            data = None
+
         return self._make_request(endpoint_name, data=data, query_params=query_params)
 
     """
