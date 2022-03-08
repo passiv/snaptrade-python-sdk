@@ -77,11 +77,11 @@ Licensed under [Apache License 2.0][2].
 
 [1]: https://docs.snaptrade.com/reference/getting-started
 [contact]: mailto:api@snaptrade.com
-[Account Information Endpoints]: docs/account-information-endpoints.md
-[Authentication Endpoints]: docs/authentication-endpoints.md
-[Connections Endpoints]: docs/connections-endpoints.md
-[Reference Data Endpoints]: docs/reference-data-endpoints.md
-[Reporting Endpoints]: docs/reporting-endpoints.md
-[Trading Endpoints]: docs/trading-endpoints.md
+[Account Information Endpoints]: https://github.com/passiv/snaptrade-python/blob/main/docs/account-information-endpoints.md
+[Authentication Endpoints]: https://github.com/passiv/snaptrade-python/blob/main/docs/authentication-endpoints.md
+[Connections Endpoints]: https://github.com/passiv/snaptrade-python/blob/main/docs/connections-endpoints.md
+[Reference Data Endpoints]: https://github.com/passiv/snaptrade-python/blob/main/docs/reference-data-endpoints.md
+[Reporting Endpoints]: https://github.com/passiv/snaptrade-python/blob/main/docs/reporting-endpoints.md
+[Trading Endpoints]: https://github.com/passiv/snaptrade-python/blob/main/docs/trading-endpoints.md
 [Installing using pip and virtual environments]: https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments/
 [2]: LICENSE
