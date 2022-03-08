@@ -11,8 +11,7 @@ from requests.exceptions import ConnectionError
 
 class SnapTradeAPIClient:
     api_version = "v1/"
-    # base_url = "https://api.snaptrade.com/api/"
-    base_url = "https://api.staging.passiv.com/api/"
+    base_url = "https://api.snaptrade.com/api/"
     endpoints = SnapTradeUtils.get_api_endpoints()
 
     def __init__(
@@ -342,7 +341,7 @@ class SnapTradeAPIClient:
         start_date,
         end_date,
         frequency=None,
-        accountIDs=None,
+        account_ids=None,
     ):
         endpoint_name = "performance"
 
@@ -356,8 +355,11 @@ class SnapTradeAPIClient:
         if frequency:
             initial_query_params["frequency"] = frequency
 
-        if accountIDs:  # Should be account IDs seprated by commas
-            initial_query_params["accounts"] = accountIDs
+        if account_ids:  # Should be account IDs separated by commas
+            if type(account_ids) == list:
+                account_ids = ",".join(account_ids)
+
+            initial_query_params["accounts"] = account_ids
 
         query_params = self.prepare_query_params(
             endpoint_name, initial_params=initial_query_params
