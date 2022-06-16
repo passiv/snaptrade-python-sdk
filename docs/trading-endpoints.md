@@ -7,7 +7,7 @@ from snaptrade.api_client import SnapTradeAPIClient
 client = SnapTradeAPIClient(clientID, consumerKey)
 
 symbols = []  # Must be a list of symbol id or a list of symbol tickers
-search_by_ticker = True  # Set to True if symbols array is a list of tickers, False if it's a list of ids 
+search_by_ticker = True  # Set to True if symbols array is a list of tickers, False if it's a list of ids
 
 quotes = client.get_market_quotes(user_id, user_secret, symbols, search_by_ticker)
 ```
@@ -20,13 +20,13 @@ from snaptrade.api_client import SnapTradeAPIClient
 
 client = SnapTradeAPIClient(clientID, consumerKey)
 
-state = ""  # Optional: One of "executed", "open", "all"   
+state = ""  # Optional: One of "executed", "open", "all"
 days = ""  # Optional: Filter query for records since X days from today
 
 quotes = client.get_account_order_history(user_id, user_secret, account_id, state, days)
 ```
 
-### 3) Get impact of trade on account 
+### 3) Get impact of trade on account
 
 #### GET v1/trade/impact
 
@@ -40,7 +40,7 @@ action = ""  # BUY|SELL
 universal_symbol_id = ""  # Id of symbol object, should be a UUID
 order_type = ""   # Limit|Market
 time_in_force = "" # Day|FOK
-units = ""  # Must be a positive whole number 
+units = ""  # Must be a positive whole number
 price = ""  # Required if using Limit order, must be positive decimal numbers
 
 trade_impact = client.get_trade_impact(

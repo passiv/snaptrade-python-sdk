@@ -65,7 +65,9 @@ account_holdings = client.get_account_holdings(user_id, user_secret, account_id)
 ```
 from snaptrade.api_client import SnapTradeAPIClient
 
-client = SnapTradeAPIClient(clientID, consumerKey)
+client = SnapTradeAPIClient(clientID, consumerKey, brokerage_authorization_ids=None, account_numbers=None)
 
-account_holdings = client.get_all_holdings(user_id, user_secret)
+# brokerage_authorization_ids and account_numbers are optional, but expects a list if used.
+
+account_holdings = client.get_all_holdings(user_id, user_secret, ["36ccb6ce-f71a-492c-99c5-38c4076bd6d1"], [2419011])
 ```
