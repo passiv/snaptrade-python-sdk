@@ -1,4 +1,4 @@
-### 1) Creating a new user 
+### 1) Creating a new user
 
 #### POST v1/snapTrade/registerUser
 
@@ -9,10 +9,10 @@ client = SnapTradeAPIClient(clientID, consumerKey)
 
 register_response = client.register_user(user_id)
 
-user_secret = register_response.get("userSecret") 
+user_secret = register_response.get("userSecret")
 ```
 
-### 2) Generate a redirectURI to SnapTrade Connection Portal 
+### 2) Generate a redirectURI to SnapTrade Connection Portal
 
 #### POST v1/snapTrade/login
 

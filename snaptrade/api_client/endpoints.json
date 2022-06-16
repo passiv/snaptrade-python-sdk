@@ -5,6 +5,7 @@
         "path_params": [
             "account_id"
         ],
+        "query_params": [],
         "validation_params": [
             "clientId",
             "timestamp",
@@ -17,6 +18,7 @@
         "path_params": [
             "account_id"
         ],
+        "query_params": [],
         "validation_params": [
             "clientId",
             "timestamp",
@@ -29,6 +31,7 @@
         "path_params": [
             "account_id"
         ],
+        "query_params": [],
         "validation_params": [
             "clientId",
             "timestamp",
@@ -41,6 +44,7 @@
         "path_params": [
             "account_id"
         ],
+        "query_params": [],
         "validation_params": [
             "clientId",
             "timestamp",
@@ -53,6 +57,7 @@
         "path_params": [
             "account_id"
         ],
+        "query_params": [],
         "validation_params": [
             "clientId",
             "timestamp",
@@ -63,6 +68,7 @@
         "endpoint": "accounts",
         "method": "get",
         "path_params": [],
+        "query_params": [],
         "validation_params": [
             "clientId",
             "timestamp",
@@ -74,6 +80,7 @@
         "endpoint": "activities",
         "method": "get",
         "path_params": [],
+        "query_params": [],
         "validation_params": [
             "clientId",
             "timestamp",
@@ -81,10 +88,66 @@
             "userSecret"
         ]
     },
+    "api_credentials": {
+        "endpoint": "snapTrade/apiCredentials/%(credentials_id)s",
+        "method": "get",
+        "path_params": ["credentials_id"],
+        "query_params": [],
+        "validation_params": [
+            "clientId",
+            "timestamp",
+            "userId"
+        ]
+    },
+    "api_credentials_create": {
+        "endpoint": "snapTrade/apiCredentials",
+        "method": "post",
+        "path_params": [],
+        "query_params": [],
+        "validation_params": [
+            "clientId",
+            "timestamp",
+            "userId"
+        ]
+    },
+    "api_credentials_delete": {
+        "endpoint": "snapTrade/apiCredentials/%(credentials_id)s",
+        "method": "delete",
+        "path_params": ["credentials_id"],
+        "query_params": [],
+        "validation_params": [
+            "clientId",
+            "timestamp",
+            "userId"
+        ]
+    },
+    "api_credentials_list": {
+        "endpoint": "snapTrade/apiCredentials",
+        "method": "get",
+        "path_params": [],
+        "query_params": [],
+        "validation_params": [
+            "clientId",
+            "timestamp",
+            "userId"
+        ]
+    },
+    "api_credentials_update": {
+        "endpoint": "snapTrade/apiCredentials/%(credentials_id)s",
+        "method": "put",
+        "path_params": ["credentials_id"],
+        "query_params": [],
+        "validation_params": [
+            "clientId",
+            "timestamp",
+            "userId"
+        ]
+    },
     "api_status": {
         "endpoint": "",
         "method": "get",
         "path_params": [],
+        "query_params": [],
         "validation_params": [
             "clientId",
             "timestamp",
@@ -95,6 +158,7 @@
         "endpoint": "authorizations/%(brokerage_authorization_id)s",
         "method": "get",
         "path_params": [],
+        "query_params": [],
         "validation_params": [
             "clientId",
             "timestamp",
@@ -105,6 +169,7 @@
         "endpoint": "authorizations",
         "method": "get",
         "path_params": [],
+        "query_params": [],
         "validation_params": [
             "clientId",
             "timestamp",
@@ -115,6 +180,17 @@
         "endpoint": "brokerages",
         "method": "get",
         "path_params": [],
+        "query_params": [],
+        "validation_params": [
+            "clientId",
+            "timestamp"
+        ]
+    },
+    "brokerage_authorization_types": {
+        "endpoint": "brokerageAuthorizationTypes",
+        "method": "get",
+        "path_params": [],
+        "query_params": ["brokerages"],
         "validation_params": [
             "clientId",
             "timestamp"
@@ -126,6 +202,7 @@
         "path_params": [
             "account_id"
         ],
+        "query_params": [],
         "validation_params": [
             "clientId",
             "timestamp",
@@ -137,6 +214,7 @@
         "endpoint": "modelAssetClass",
         "method": "post",
         "path_params": [],
+        "query_params": [],
         "validation_params": [
             "clientId",
             "timestamp",
@@ -147,6 +225,7 @@
         "endpoint": "modelPortfolio",
         "method": "post",
         "path_params": [],
+        "query_params": [],
         "validation_params": [
             "clientId",
             "timestamp",
@@ -157,6 +236,7 @@
         "endpoint": "currencies",
         "method": "get",
         "path_params": [],
+        "query_params": [],
         "validation_params": [
             "clientId",
             "timestamp"
@@ -166,6 +246,7 @@
         "endpoint": "currencies/rates",
         "method": "get",
         "path_params": [],
+        "query_params": [],
         "validation_params": [
             "clientId",
             "timestamp"
@@ -177,6 +258,7 @@
         "path_params": [
             "currency_pair"
         ],
+        "query_params": [],
         "validation_params": [
             "clientId",
             "timestamp"
@@ -186,6 +268,7 @@
         "endpoint": "authorizations/%(brokerage_authorization_id)s",
         "method": "delete",
         "path_params": [],
+        "query_params": [],
         "validation_params": [
             "clientId",
             "timestamp",
@@ -195,7 +278,8 @@
     "delete_model_asset_class": {
         "endpoint": "modelAssetClass/%(model_asset_class_id)s",
         "method": "delete",
-        "path_params": "model_asset_class_id",
+        "path_params": ["model_asset_class_id"],
+        "query_params": [],
         "validation_params": [
             "clientId",
             "timestamp",
@@ -205,7 +289,8 @@
     "delete_model_portfolio": {
         "endpoint": "modelPortfolio/%(model_portfolio_id)s",
         "method": "delete",
-        "path_params": "model_portfolio_id",
+        "path_params": ["model_portfolio_id"],
+        "query_params": [],
         "validation_params": [
             "clientId",
             "timestamp",
@@ -216,15 +301,7 @@
         "endpoint": "snapTrade/deleteUser",
         "method": "post",
         "path_params": [],
-        "validation_params": [
-            "clientId",
-            "timestamp"
-        ]
-    },
-    "exchanges": {
-        "endpoint": "exchanges",
-        "method": "get",
-        "path_params": [],
+        "query_params": [],
         "validation_params": [
             "clientId",
             "timestamp"
@@ -233,7 +310,8 @@
     "get_model_portfolio": {
         "endpoint": "modelPortfolio/%(model_portfolio_id)s",
         "method": "get",
-        "path_params": "model_portfolio_id",
+        "path_params": ["model_portfolio_id"],
+        "query_params": [],
         "validation_params": [
             "clientId",
             "timestamp",
@@ -246,6 +324,7 @@
         "path_params": [
             "group_id"
         ],
+        "query_params": [],
         "validation_params": [
             "clientId",
             "timestamp",
@@ -256,6 +335,10 @@
         "endpoint": "holdings",
         "method": "get",
         "path_params": [],
+        "query_params": [
+            "brokerage_authorizations",
+            "accounts"
+        ],
         "validation_params": [
             "clientId",
             "timestamp",
@@ -267,6 +350,7 @@
         "endpoint": "modelAssetClass/%(model_asset_class_id)s",
         "method": "get",
         "path_params": "model_asset_class_id",
+        "query_params": [],
         "validation_params": [
             "clientId",
             "timestamp",
@@ -277,6 +361,7 @@
         "endpoint": "modelAssetClass",
         "method": "get",
         "path_params": [],
+        "query_params": [],
         "validation_params": [
             "clientId",
             "timestamp",
@@ -287,6 +372,7 @@
         "endpoint": "modelPortfolio",
         "method": "get",
         "path_params": [],
+        "query_params": [],
         "validation_params": [
             "clientId",
             "timestamp",
@@ -297,6 +383,7 @@
         "endpoint": "snapTrade/redeemToken",
         "method": "post",
         "path_params": [],
+        "query_params": [],
         "validation_params": [
             "clientId"
         ]
@@ -305,6 +392,7 @@
         "endpoint": "performance/custom",
         "method": "get",
         "path_params": [],
+        "query_params": [],
         "validation_params": [
             "clientId",
             "timestamp",
@@ -318,6 +406,7 @@
         "path_params": [
             "trade_id"
         ],
+        "query_params": [],
         "validation_params": [
             "clientId",
             "timestamp",
@@ -331,6 +420,7 @@
         "path_params": [
             "group_id"
         ],
+        "query_params": [],
         "validation_params": [
             "clientId",
             "timestamp",
@@ -343,6 +433,7 @@
         "path_params": [
             "group_id"
         ],
+        "query_params": [],
         "validation_params": [
             "clientId",
             "timestamp",
@@ -355,6 +446,7 @@
         "path_params": [
             "group_id"
         ],
+        "query_params": [],
         "validation_params": [
             "clientId",
             "timestamp",
@@ -368,6 +460,7 @@
             "group_id",
             "calculated_trade_id"
         ],
+        "query_params": [],
         "validation_params": [
             "clientId",
             "timestamp",
@@ -378,6 +471,7 @@
         "endpoint": "portfolioGroups/",
         "method": "post",
         "path_params": [],
+        "query_params": [],
         "validation_params": [
             "clientId",
             "timestamp",
@@ -390,6 +484,7 @@
         "path_params": [
             "group_id"
         ],
+        "query_params": [],
         "validation_params": [
             "clientId",
             "timestamp",
@@ -402,6 +497,7 @@
         "path_params": [
             "group_id"
         ],
+        "query_params": [],
         "validation_params": [
             "clientId",
             "timestamp",
@@ -415,6 +511,7 @@
             "group_id",
             "symbol_id"
         ],
+        "query_params": [],
         "validation_params": [
             "clientId",
             "timestamp",
@@ -427,6 +524,7 @@
         "path_params": [
             "group_id"
         ],
+        "query_params": [],
         "validation_params": [
             "clientId",
             "timestamp",
@@ -439,6 +537,7 @@
         "path_params": [
             "group_id"
         ],
+        "query_params": [],
         "validation_params": [
             "clientId",
             "timestamp",
@@ -451,6 +550,7 @@
         "path_params": [
             "group_id"
         ],
+        "query_params": [],
         "validation_params": [
             "clientId",
             "timestamp",
@@ -463,6 +563,7 @@
         "path_params": [
             "group_id"
         ],
+        "query_params": [],
         "validation_params": [
             "clientId",
             "timestamp",
@@ -475,6 +576,7 @@
         "path_params": [
             "group_id"
         ],
+        "query_params": [],
         "validation_params": [
             "clientId",
             "timestamp",
@@ -487,6 +589,7 @@
         "path_params": [
             "group_id"
         ],
+        "query_params": [],
         "validation_params": [
             "clientId",
             "timestamp",
@@ -499,6 +602,7 @@
         "path_params": [
             "group_id"
         ],
+        "query_params": [],
         "validation_params": [
             "clientId",
             "timestamp",
@@ -511,6 +615,7 @@
         "path_params": [
             "group_id"
         ],
+        "query_params": [],
         "validation_params": [
             "clientId",
             "timestamp",
@@ -523,6 +628,7 @@
         "path_params": [
             "group_id"
         ],
+        "query_params": [],
         "validation_params": [
             "clientId",
             "timestamp",
@@ -533,6 +639,7 @@
         "endpoint": "portfolioGroups",
         "method": "get",
         "path_params": [],
+        "query_params": [],
         "validation_params": [
             "clientId",
             "timestamp",
@@ -543,6 +650,7 @@
         "endpoint": "snapTrade/registerUser",
         "method": "post",
         "path_params": [],
+        "query_params": [],
         "validation_params": [
             "clientId",
             "timestamp"
@@ -554,10 +662,21 @@
         "path_params": [
             "group_id"
         ],
+        "query_params": [],
         "validation_params": [
             "clientId",
             "timestamp",
             "userId"
+        ]
+    },
+    "security_types": {
+        "endpoint": "securityTypes",
+        "method": "get",
+        "path_params": [],
+        "query_params": ["brokerages"],
+        "validation_params": [
+            "clientId",
+            "timestamp"
         ]
     },
     "symbol_by_id": {
@@ -566,6 +685,7 @@
         "path_params": [
             "symbol_id"
         ],
+        "query_params": [],
         "validation_params": [
             "clientId",
             "timestamp"
@@ -577,6 +697,7 @@
         "path_params": [
             "ticker"
         ],
+        "query_params": [],
         "validation_params": [
             "clientId",
             "timestamp"
@@ -586,6 +707,7 @@
         "endpoint": "accounts/%(account_id)s/quotes",
         "method": "get",
         "path_params": [],
+        "query_params": [],
         "validation_params": [
             "clientId",
             "timestamp"
@@ -595,6 +717,7 @@
         "endpoint": "symbols",
         "method": "post",
         "path_params": [],
+        "query_params": [],
         "validation_params": [
             "clientId",
             "timestamp"
@@ -604,6 +727,7 @@
         "endpoint": "trade/impact",
         "method": "post",
         "path_params": [],
+        "query_params": [],
         "validation_params": [
             "clientId",
             "timestamp",
@@ -617,6 +741,7 @@
         "path_params": [
             "account_id"
         ],
+        "query_params": [],
         "validation_params": [
             "clientId",
             "timestamp",
@@ -626,7 +751,8 @@
     "update_model_asset_class": {
         "endpoint": "modelAssetClass/%(model_asset_class_id)s",
         "method": "post",
-        "path_params": "model_asset_class_id",
+        "path_params": ["model_asset_class_id"],
+        "query_params": [],
         "validation_params": [
             "clientId",
             "timestamp",
@@ -636,7 +762,8 @@
     "update_model_portfolio": {
         "endpoint": "modelPortfolio/%(model_portfolio_id)s",
         "method": "post",
-        "path_params": "model_portfolio_id",
+        "path_params": ["model_portfolio_id"],
+        "query_params": [],
         "validation_params": [
             "clientId",
             "timestamp",
@@ -649,6 +776,7 @@
         "path_params": [
             "group_id"
         ],
+        "query_params": [],
         "validation_params": [
             "clientId",
             "timestamp",
@@ -659,6 +787,11 @@
         "endpoint": "snapTrade/login",
         "method": "post",
         "path_params": [],
+        "query_params": [
+            "broker",
+            "immediateRedirect",
+            "customRedirect"
+        ],
         "validation_params": [
             "clientId",
             "timestamp"

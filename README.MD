@@ -4,7 +4,7 @@ A SnapTrade python client library to help you make requests to the [SnapTrade AP
 
 If you need help or have any questions, send us an email at [api@snaptrade.com][contact].
 
-## Requirements and Installation 
+## Requirements and Installation
 ### Python version requirements
 * Python 3.6 or later
 
@@ -12,12 +12,12 @@ If you need help or have any questions, send us an email at [api@snaptrade.com][
 ```
 pip install snaptrade
 ```
-* It is recommended that you install this library on a virtual environment. You can find out more about this in the following link: 
+* It is recommended that you install this library on a virtual environment. You can find out more about this in the following link:
 [Installing using pip and virtual environments]
 
 ## SnapTradeAPIClient
-Before getting started, you will need a **clientID** and a **consumerKey**. If you don't have one, please send us an email 
-to get a new one. 
+Before getting started, you will need a **clientID** and a **consumerKey**. If you don't have one, please send us an email
+to get a new one.
 
 ### Why use SnapTradeAPIClient?
 1) The client uses the clientID and consumerKey that you pass in to sign a request. This ensures that all requests made to the API server are signed and authenticated correctly.
@@ -29,28 +29,28 @@ The code block belows shows you to initialize a SnapTradeAPIClient and how to ma
 
 ```
 """
-Your consumerKey should always remain a secret! Never hard code it! 
-""" 
+Your consumerKey should always remain a secret! Never hard code it!
+"""
 
 from snaptrade.api_client import SnapTradeAPIClient
- 
-# 1) Initialize a client with your clientID and consumerKey. 
+
+# 1) Initialize a client with your clientID and consumerKey.
 client = SnapTradeAPIClient(clientID, consumerKey)
 
-# 2) Check that the client is able to make a request to the API server. 
+# 2) Check that the client is able to make a request to the API server.
 api_status_response = client.api_status()
 print(api_status_response)
 
-# 3) Create a new user on SnapTrade 
+# 3) Create a new user on SnapTrade
 user_id = "userIDProvidedByPartner"
 register_response = client.register_user(user_id)
 
 # Note: A user secret is only generated once. It's required to access
-# resources for certain endpoints. 
+# resources for certain endpoints.
 
-user_secret = register_response.get("userSecret") 
+user_secret = register_response.get("userSecret")
 
-# 4) Get a redirect URI. Users will need this to connect 
+# 4) Get a redirect URI. Users will need this to connect
 # their brokerage to the SnapTrade server.
 
 redirect_uri = client.get_user_login_redirect_uri(user_id, user_secret).get("redirectURI")
@@ -73,15 +73,16 @@ Check out the documentation below for making requests to other SnapTrade API end
 
 ## License & copyrights
 
-Licensed under [Apache License 2.0][2]. 
+Licensed under [Apache License 2.0][2].
 
 [1]: https://docs.snaptrade.com/reference/getting-started
 [contact]: mailto:api@snaptrade.com
-[Account Information Endpoints]: https://github.com/passiv/snaptrade-python/blob/main/docs/account-information-endpoints.md
-[Authentication Endpoints]: https://github.com/passiv/snaptrade-python/blob/main/docs/authentication-endpoints.md
-[Connections Endpoints]: https://github.com/passiv/snaptrade-python/blob/main/docs/connections-endpoints.md
-[Reference Data Endpoints]: https://github.com/passiv/snaptrade-python/blob/main/docs/reference-data-endpoints.md
-[Reporting Endpoints]: https://github.com/passiv/snaptrade-python/blob/main/docs/reporting-endpoints.md
-[Trading Endpoints]: https://github.com/passiv/snaptrade-python/blob/main/docs/trading-endpoints.md
+[Account Information Endpoints]: https://github.com/passiv/snaptrade-python-sdk/blob/main/docs/account-information-endpoints.md
+[Authentication Endpoints]: https://github.com/passiv/snaptrade-python-sdk/blob/main/docs/authentication-endpoints.md
+[Connections Endpoints]: https://github.com/passiv/snaptrade-python-sdk/blob/main/docs/connections-endpoints.md
+[Reference Data Endpoints]: https://github.com/passiv/snaptrade-python-sdk/blob/main/docs/reference-data-endpoints.md
+[Reporting Endpoints]: https://github.com/passiv/snaptrade-python-sdk/blob/main/docs/reporting-endpoints.md
+[Trading Endpoints]: https://github.com/passiv/snaptrade-python-sdk/blob/main/docs/trading-endpoints.md
+[Development Tools Endpoints]: https://github.com/passiv/snaptrade-python-sdk/blob/main/docs/development-tools-endpoint.md
 [Installing using pip and virtual environments]: https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments/
 [2]: LICENSE
