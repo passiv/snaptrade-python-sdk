@@ -21,11 +21,18 @@ class SnapTradeAPIClient:
         consumer_key,
         return_response_as_dict=True,
         debug_response=False,
+        user_jwt=None,
     ):
         self.client_id = client_id
         self.consumer_key = consumer_key
         self.return_response_as_dict = return_response_as_dict
         self.debug_response = debug_response
+        self.user_jwt = user_jwt
+
+    @classmethod
+    def jwt_init(cls, jwt, return_response_as_dict=True, debug_response=False):
+        """Returns returns a SnapTradeAPIClient instance by passing in a JWT token. This will set the client_id and consumer_key to None"""
+        return cls(None, None, return_response_as_dict, debug_response, jwt)
 
     def sign_request(self, request_data, request_path, request_query):
         """This method is responsible for signing request using the provided consumer key"""
@@ -76,23 +83,31 @@ class SnapTradeAPIClient:
         else:
             prepared_params = dict()
 
-        prepared_params["clientId"] = self.client_id
-        prepared_params["timestamp"] = SnapTradeUtils.get_epoch_time()
+        if self.user_jwt:
+            if "userId" in prepared_params:
+                prepared_params.pop("userId")
+            if "userSecret" in prepared_params:
+                prepared_params.pop("userSecret")
+        else:
+            prepared_params["clientId"] = self.client_id
+            prepared_params["timestamp"] = SnapTradeUtils.get_epoch_time()
 
         return prepared_params
 
-    def _make_request(self, endpoint_name, data=None, path_params=None, query_params=None):
+    def _make_request(self, endpoint_name, data=None, path_params=None, query_params=None, force_signature_auth=False):
         """Logic to make request to SnapTrade API server"""
         if path_params is None:
             path_params = {}
 
         request_path = self._generate_request_path(endpoint_name, **path_params)
 
-        signature = self.get_signature(data, request_path, query_params)
-
         endpoint = self._generate_api_endpoint(endpoint_name, **path_params)
 
-        headers = {"Signature": signature}
+        if self.user_jwt and not force_signature_auth:
+            headers = {"Authorization": f"JWT {self.user_jwt}"}
+        else:
+            signature = self.get_signature(data, request_path, query_params)
+            headers = {"Signature": signature}
 
         method = self.endpoints[endpoint_name]["method"]
 
@@ -140,10 +155,20 @@ class SnapTradeAPIClient:
         return self._make_request(endpoint_name, query_params=query_params)
 
     """
-    User registration, auth and deletion
+    User registration, auth and deletion, register users list
     """
 
-    def register_user(self, user_id):
+    def get_registered_users(self):
+        """
+        Gets a list of SnapTrade users registered by partner
+        """
+        endpoint_name = "registered_users"
+
+        query_params = self.prepare_query_params(endpoint_name)
+
+        return self._make_request(endpoint_name, query_params=query_params, force_signature_auth=True)
+
+    def register_user(self, user_id, rsa_public_key=None):
         """
         Register a new user in SnapTrade.
 
@@ -151,10 +176,10 @@ class SnapTradeAPIClient:
         """
         endpoint_name = "register_user"
 
-        data = dict(userId=user_id)
+        data = dict(userId=user_id, rsaPublicKey=rsa_public_key)
         query_params = self.prepare_query_params(endpoint_name)
 
-        return self._make_request(endpoint_name, query_params=query_params, data=data)
+        return self._make_request(endpoint_name, query_params=query_params, data=data, force_signature_auth=True)
 
     def delete_user(self, user_id):
         """Deletes an existing user of provided user_id"""
@@ -164,7 +189,16 @@ class SnapTradeAPIClient:
         initial_query_params = dict(userId=user_id)
         query_params = self.prepare_query_params(endpoint_name, initial_query_params)
 
-        return self._make_request(endpoint_name, query_params=query_params)
+        return self._make_request(endpoint_name, query_params=query_params, force_signature_auth=True)
+
+    def get_encrypted_jwt(self, user_id, user_secret):
+        """Returns encrypted JWT token"""
+        endpoint_name = "get_encrypted_jwt"
+
+        initial_query_params = dict(userId=user_id, userSecret=user_secret)
+        query_params = self.prepare_query_params(endpoint_name, initial_params=initial_query_params)
+
+        return self._make_request(endpoint_name, query_params=query_params, force_signature_auth=True)
 
     def get_user_login_redirect_uri(
         self,
@@ -174,7 +208,7 @@ class SnapTradeAPIClient:
         immediate_redirect=False,
         custom_redirect=None,
     ):
-        """Returns redirect uri for user to"""
+        """Returns redirect uri for user"""
         endpoint_name = "user_login_redirect_uri"
 
         initial_query_params = dict(userId=user_id, userSecret=user_secret)
@@ -191,7 +225,7 @@ class SnapTradeAPIClient:
         if not data:
             data = None
 
-        return self._make_request(endpoint_name, data=data, query_params=query_params)
+        return self._make_request(endpoint_name, data=data, query_params=query_params, force_signature_auth=True)
 
     """
     Accounts details, holdings, brokerage connection endpoints
@@ -292,7 +326,7 @@ class SnapTradeAPIClient:
     Reporting endpoints: activities, performance
     """
 
-    def get_activities(self, user_id, user_secret, start_date=None, end_date=None):
+    def get_activities(self, user_id, user_secret, start_date=None, end_date=None, account_ids=None):
         """Gets available activities/transactions of all brokerage accounts linked to the user"""
         endpoint_name = "activities"
 
@@ -304,20 +338,32 @@ class SnapTradeAPIClient:
         if end_date:
             initial_query_params["endDate"] = end_date
 
+        if account_ids:
+            # Expects a list of account ids
+            initial_query_params["accounts"] = ",".join([str(account_id) for account_id in account_ids])
+
         query_params = self.prepare_query_params(endpoint_name, initial_params=initial_query_params)
 
         return self._make_request(endpoint_name, query_params=query_params)
 
-    def get_performance_custom(self, user_id, user_secret, start_date, end_date, frequency=None, accountIDs=None):
+    def get_performance_custom(
+        self, user_id, user_secret, start_date, end_date, frequency=None, accountIDs=None, account_ids=None
+    ):
         """Gets performance information of all brokerage accounts linked to the user"""
         endpoint_name = "performance"
 
-        initial_query_params = dict(userId=user_id, userSecret=user_secret, startDate=start_date, end_date=end_date)
+        initial_query_params = dict(userId=user_id, userSecret=user_secret, startDate=start_date, endDate=end_date)
 
         if frequency:
             initial_query_params["frequency"] = frequency
 
-        if accountIDs:  # Should be account IDs seprated by commas
+        if account_ids:
+            # Expects a list of account ids
+            initial_query_params["accounts"] = ",".join([str(account_id) for account_id in account_ids])
+        elif accountIDs:
+            # accountIDs is left in for backwards compatibility. We should be using account_ids moving forward
+
+            # a comma separated string is expected for accountIDs
             initial_query_params["accounts"] = accountIDs
 
         query_params = self.prepare_query_params(endpoint_name, initial_params=initial_query_params)
@@ -366,7 +412,7 @@ class SnapTradeAPIClient:
         return self._make_request(endpoint_name, query_params=query_params)
 
     def get_currency_pair_exchange_rate(self, src_currency_code, dst_currency_code):
-        """Get a the exchange rates for a currency pair supported by SnapTrade"""
+        """Get the exchange rates for a currency pair supported by SnapTrade"""
         endpoint_name = "currency_pair_rate"
         query_params = self.prepare_query_params(endpoint_name)
         path_params = dict(currency_pair=f"{src_currency_code}-{dst_currency_code}")
@@ -396,6 +442,21 @@ class SnapTradeAPIClient:
         path_params = dict(ticker=ticker)
 
         return self._make_request(endpoint_name, path_params=path_params, query_params=query_params)
+
+    def search_symbols_by_account(self, user_id, user_secret, account_id, substring):
+        """Search universal symbol tickers based on their substring and account id"""
+        endpoint_name = "account_symbols_search"
+
+        initial_query_params = dict(
+            userId=user_id,
+            userSecret=user_secret,
+        )
+
+        query_params = self.prepare_query_params(endpoint_name, initial_query_params)
+        path_params = dict(account_id=account_id)
+        data = dict(substring=substring)
+
+        return self._make_request(endpoint_name, data=data, path_params=path_params, query_params=query_params)
 
     def get_security_types(self):
         """Get a list of security types supported by SnapTrade"""
@@ -569,3 +630,57 @@ class SnapTradeAPIClient:
         path_params = dict(credentials_id=credentials_id)
 
         return self._make_request(endpoint_name, path_params=path_params, query_params=query_params)
+
+    def preview_option_trade(
+        self,
+        user_id: str,
+        user_secret: str,
+        account_id: str,
+        option_symbol_id: str,
+        order_type: str,
+        time_in_force: str,
+        action: str,
+        units: int,
+    ):
+        """
+        Executes a POST request to `v1/optionTrade/impact/` to ensure the validate of a proposed option trade.
+        """
+        endpoint_name = "preview_option_trade"
+        initial_query_params = dict(userId=user_id, userSecret=user_secret)
+        query_params = self.prepare_query_params(endpoint_name, initial_params=initial_query_params)
+        path_params = dict()
+        data = dict(
+            account_id=account_id,
+            option_symbol_id=option_symbol_id,
+            order_type=order_type,
+            time_in_force=time_in_force,
+            action=action,
+            units=units,
+        )
+
+        return self._make_request(endpoint_name, path_params=path_params, query_params=query_params, data=data)
+
+    def execute_option_trade(self, user_id: str, user_secret: str, calculated_trade_id: str):
+        """
+        Executes an option trade, after previewing and confirming its validity with the `preview_option_trade` method above.
+        Executes a POST request to `v1/optionTrade/%(uuid_pk)s/`.
+        """
+        endpoint_name = "execute_option_trade"
+        initial_query_params = dict(userId=user_id, userSecret=user_secret)
+        query_params = self.prepare_query_params(endpoint_name, initial_params=initial_query_params)
+        path_params = dict(uuid_pk=calculated_trade_id)
+
+        return self._make_request(endpoint_name, path_params=path_params, query_params=query_params)
+
+    """
+    Retrieve error logs
+    """
+
+    def retrieve_error_logs(self, user_id: str, userSecret: str):
+        """Retrieve error logs associated with a particular user"""
+        endpoint_name = "retrieve_error_logs"
+        initial_query_params = dict(userId=user_id, userSecret=userSecret)
+
+        query_params = self.prepare_query_params(endpoint_name, initial_params=initial_query_params)
+
+        return self._make_request(endpoint_name, query_params=query_params, force_signature_auth=True)
