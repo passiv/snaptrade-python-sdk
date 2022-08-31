@@ -7,7 +7,8 @@ from snaptrade.api_client import SnapTradeAPIClient
 
 client = SnapTradeAPIClient(clientID, consumerKey)
 
-register_response = client.register_user(user_id)
+# rsa_public_key is nullable, if it is not required for the user
+register_response = client.register_user(user_id, rsa_public_key)
 
 user_secret = register_response.get("userSecret")
 ```
@@ -36,4 +37,27 @@ from snaptrade.api_client import SnapTradeAPIClient
 client = SnapTradeAPIClient(clientID, consumerKey)
 
 deleted_response = client.delete_user(user_id)
+```
+
+### 4) Get an encrypted JWT for the user
+
+#### GET v1/snapTrade/encryptedJWT
+
+```
+from snaptrade.api_client import SnapTradeAPIClient
+
+client = SnapTradeAPIClient(clientID, consumerKey)
+
+encrypted_jwt = client.get_encrypted_jwt(user_id, user_secret)
+```
+
+### 5) Gets a list of users registered by partner
+#### GET v1/snapTrade/listUsers
+
+```
+from snaptrade.api_client import SnapTradeAPIClient
+
+client = SnapTradeAPIClient(clientID, consumerKey)
+
+registered_users = client.get_registered_users()
 ```
