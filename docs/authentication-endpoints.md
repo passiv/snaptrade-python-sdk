@@ -22,7 +22,12 @@ from snaptrade.api_client import SnapTradeAPIClient
 
 client = SnapTradeAPIClient(clientID, consumerKey)
 
-redirect_uri_response = client.get_user_login_redirect_uri(user_id, user_secret)
+broker = ""    # Optional: broker slug to connect directly to broker
+immediate_redirect = False    # Optional: boolean to redirect straight to redirect uri instead of going to Snaptrade connection portal
+custom_redirect = ""    # Optional: redirct uri 
+reconnent = ""   # Optional: Brokerage connection id to reconnect
+
+redirect_uri_response = client.get_user_login_redirect_uri(user_id, user_secret, broker, immediate_redirect, custom_redirect, reconnect)
 
 redirect_uri = redirect_uri_response.get("redirectURI")
 ```

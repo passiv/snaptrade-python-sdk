@@ -207,6 +207,7 @@ class SnapTradeAPIClient:
         broker=None,
         immediate_redirect=False,
         custom_redirect=None,
+        reconnect = None,
     ):
         """Returns redirect uri for user"""
         endpoint_name = "user_login_redirect_uri"
@@ -221,6 +222,8 @@ class SnapTradeAPIClient:
             data["immediateRedirect"] = True
         if custom_redirect:
             data["customRedirect"] = custom_redirect
+        if reconnect:
+            data["reconnect"] = reconnect
 
         if not data:
             data = None
