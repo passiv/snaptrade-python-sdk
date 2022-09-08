@@ -5,7 +5,7 @@ with open("README.MD", "r") as f:
 
 setup(
     name="snaptrade",
-    version="1.0.5",
+    version="1.0.6",
     description="A Python implementation of SnapTrade API client library",
     packages=find_packages(),
     package_data={"snaptrade": ["api_client/endpoints.json"]},
