@@ -64,7 +64,7 @@ class SnapTradeAPIClient:
         """Generates API endpoint based on endpoint_name and params given"""
         endpoint = self.endpoints[endpoint_name]
 
-        return "/api/v1/%s" % (endpoint["endpoint"] % path_params)  # type: ignore
+        return "/api/v1/%s" % (endpoint["endpoint"] % path_params) 
 
     def _generate_api_endpoint(self, endpoint_name, **path_params):
         """Generates API endpoint based on endpoint_name and params given"""
@@ -110,9 +110,9 @@ class SnapTradeAPIClient:
             headers = {"Signature": signature}
 
         method = self.endpoints[endpoint_name]["method"]
-
+        
         response = None
-
+ 
         try:
             if method == "post":
                 response = requests.post(endpoint, headers=headers, params=query_params, json=data)
@@ -208,6 +208,7 @@ class SnapTradeAPIClient:
         immediate_redirect=False,
         custom_redirect=None,
         reconnect = None,
+        connection_type = None,
     ):
         """Returns redirect uri for user"""
         endpoint_name = "user_login_redirect_uri"
@@ -224,6 +225,8 @@ class SnapTradeAPIClient:
             data["customRedirect"] = custom_redirect
         if reconnect:
             data["reconnect"] = reconnect
+        if connection_type:
+            data["connectionType"] = connection_type
 
         if not data:
             data = None
@@ -465,6 +468,14 @@ class SnapTradeAPIClient:
         """Get a list of security types supported by SnapTrade"""
 
         endpoint_name = "security_types"
+        query_params = self.prepare_query_params(endpoint_name)
+
+        return self._make_request(endpoint_name, query_params=query_params)
+
+    def get_partner_data(self):
+        """Get data relevant to partner"""
+
+        endpoint_name = "partner_details"
         query_params = self.prepare_query_params(endpoint_name)
 
         return self._make_request(endpoint_name, query_params=query_params)
