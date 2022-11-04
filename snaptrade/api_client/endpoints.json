@@ -443,6 +443,16 @@
             "clientId"
         ]
     },
+    "partner_details": {
+        "endpoint": "snapTrade/partners/",
+        "method": "get",
+        "path_params": [],
+        "query_params": [],
+        "validation_params": [
+            "clientId",
+            "timestamp"
+        ]
+    },
     "performance": {
         "endpoint": "performance/custom",
         "method": "get",

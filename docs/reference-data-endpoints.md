@@ -113,3 +113,15 @@ brokerages = []  # A list of brokerage slugs. Usually the name of the brokerage 
 
 brokerage_authorization_types = client.get_brokerage_authorization_types(brokerages)
 ```
+
+### 9) Get metadata for partner
+
+#### GET v1/snapTrade/partners
+
+```
+from snaptrade.api_client import SnapTradeAPIClient
+
+client = SnapTradeAPIClient(clientID, consumerKey)
+
+partner_data  = client.get_partner_data()
+```

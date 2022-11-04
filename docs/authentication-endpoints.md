@@ -26,6 +26,7 @@ broker = ""    # Optional: broker slug to connect directly to broker
 immediate_redirect = False    # Optional: boolean to redirect straight to redirect uri instead of going to Snaptrade connection portal
 custom_redirect = ""    # Optional: redirct uri 
 reconnect = ""   # Optional: Brokerage authorization id to reconnect
+connection_type = ""   # Optional: Connection type code (read/trade)
 
 redirect_uri_response = client.get_user_login_redirect_uri(user_id, user_secret, broker, immediate_redirect, custom_redirect, reconnect)
 
