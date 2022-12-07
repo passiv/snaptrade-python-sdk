@@ -140,9 +140,13 @@ class SnapTradeAPIClient:
                 return SnapTradeUtils.convert_to_simple_namespace(error_message)
 
         try:
-            data = response.json()
+            if response.content:
+                data = response.json()
+            else:
+                data = dict(status_code=response.status_code, detail="No content returned")
         except:
-            data = dict(status_code=response.status_code, detail=f"{str(response.content)}")
+            data = dict(status_code=response.status_code, detail=f"{str(response.content)}", code="0000")
+
 
         if self.return_response_as_dict:
             return data
