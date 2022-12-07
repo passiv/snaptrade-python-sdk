@@ -123,7 +123,7 @@ class SnapTradeAPIClient:
             elif method == "delete":
                 response = requests.delete(endpoint, headers=headers, params=query_params, json=data)
         except ConnectionError:
-            error_message = dict(status_code=502, detail="Failed to connect to api server", code=0000)
+            error_message = dict(status_code=502, detail="Failed to connect to api server", code="0000")
             if self.return_response_as_dict:
                 return error_message
             else:
@@ -132,10 +132,17 @@ class SnapTradeAPIClient:
         if self.debug_response:
             return response
 
-        if response.content:
+        if response.status_code == 502:
+            error_message = dict(status_code=502, detail="Failed to connect to api server", code="0000")
+            if self.return_response_as_dict:
+                return error_message
+            else:
+                return SnapTradeUtils.convert_to_simple_namespace(error_message)
+
+        try:
             data = response.json()
-        else:
-            data = dict(status_code=response.status_code, detail="No content returned")
+        except:
+            data = dict(status_code=response.status_code, detail=f"{str(response.content)}")
 
         if self.return_response_as_dict:
             return data
