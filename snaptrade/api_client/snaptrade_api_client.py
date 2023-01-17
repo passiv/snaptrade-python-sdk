@@ -590,6 +590,45 @@ class SnapTradeAPIClient:
 
         return self._make_request(endpoint_name, path_params=path_params, query_params=query_params, data=data)
 
+    def place_unvalidated_trade(        
+        self,
+        user_id,
+        user_secret,
+        account_id,
+        action,
+        universal_symbol_id,
+        order_type,
+        time_in_force,
+        units,
+        price=None,
+        stop_price=None
+    ):
+        """Places a trade with no validation"""
+        endpoint_name = "place_unvalidated_trade"
+
+        initial_query_params = dict(userId=user_id, userSecret=user_secret)
+
+        query_params = self.prepare_query_params(endpoint_name, initial_params=initial_query_params)
+
+        
+        if time_in_force.upper() == "DAY":
+            time_in_force = time_in_force.title()
+        else:
+            time_in_force = time_in_force.upper()
+
+        trade_data = {
+            "account_id": account_id,
+            "action": action.title(),
+            "universal_symbol_id": universal_symbol_id,
+            "order_type": order_type,
+            "time_in_force": time_in_force,
+            "units": units,
+            "price": price,
+            "stop": stop_price
+        }
+
+        return self._make_request(endpoint_name, data=trade_data, query_params=query_params)
+
     """
     SnapTrade Partners Brokerage API Credentials Endpoints
     """
