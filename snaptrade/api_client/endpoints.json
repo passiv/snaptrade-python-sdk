@@ -479,6 +479,20 @@
             "userSecret"
         ]
     },
+    "place_unvalidated_trade": {
+        "endpoint": "trade/place",
+        "method": "post",
+        "path_params": [
+            "trade_id"
+        ],
+        "query_params": [],
+        "validation_params": [
+            "clientId",
+            "timestamp",
+            "userID",
+            "userSecret"
+        ]
+    },
     "portfolio_group_accounts": {
         "endpoint": "portfolioGroups/%(group_id)s/accounts",
         "method": "get",

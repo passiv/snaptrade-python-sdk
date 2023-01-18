@@ -81,3 +81,34 @@ brokerage_order_id = ""  # Order id as returned by broker. Obtained in either st
 
 order_response = client.cancel_order(user_id, user_secret, account_id, brokerage_order_id)
 ```
+
+### 6) Place a trade with NO validation.
+
+#### GET v1/trade/place
+
+```
+from snaptrade.api_client import SnapTradeAPIClient
+
+client = SnapTradeAPIClient(clientID, consumerKey)
+
+action = ""  # BUY|SELL
+universal_symbol_id = ""  # Id of symbol object, should be a UUID
+order_type = ""   # Limit|Market
+time_in_force = "" # Day|FOK|GTC
+units = ""  # Must be a positive whole number
+price = ""  # Required if using Limit order, must be positive decimal numbers
+stop = "" # Required if using a stop price
+
+trade_impact = client.place_unvalidated_trade(
+        user_id,
+        user_secret,
+        account_id,
+        action,
+        universal_symbol_id,
+        order_type,
+        time_in_force,
+        units,
+        price=price,
+        stop=stop
+    )
+```
