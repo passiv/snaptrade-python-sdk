@@ -1,1 +1,2 @@
 from snaptrade.api_client.snaptrade_api_client import SnapTradeAPIClient
+print("*** This Python Package has been deprecated and is no longer receiving support. Please use our maintained SDK here: https://pypi.org/project/snaptrade-python-sdk/ ***")

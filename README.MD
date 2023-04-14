@@ -1,3 +1,5 @@
+### This Python Package has been deprecated and is no longer receiving support. Please use our maintained SDK here: https://pypi.org/project/snaptrade-python-sdk/
+
 # SnapTrade-Python
 A SnapTrade python client library to help you make requests to the [SnapTrade API][1] endpoints more easily.
 
