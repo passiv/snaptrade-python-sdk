@@ -10,6 +10,7 @@ setup(
     packages=find_packages(),
     package_data={"snaptrade": ["api_client/endpoints.json"]},
     long_description=long_description,
+    development_status= 7,
     long_description_content_type="text/markdown",
     classifiers=[
         "Development Status :: 5 - Production/Stable",
