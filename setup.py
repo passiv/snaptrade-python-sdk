@@ -5,14 +5,14 @@ with open("README.MD", "r") as f:
 
 setup(
     name="snaptrade",
-    version="1.0.8",
+    version="1.0.9",
     description="A Python implementation of SnapTrade API client library",
     packages=find_packages(),
     package_data={"snaptrade": ["api_client/endpoints.json"]},
     long_description=long_description,
     long_description_content_type="text/markdown",
     classifiers=[
-        "Development Status :: 5 - Production/Stable",
+        "Development Status :: 7 - Inactive",
         "License :: OSI Approved :: Apache Software License",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
