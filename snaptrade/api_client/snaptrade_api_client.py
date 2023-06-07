@@ -343,7 +343,7 @@ class SnapTradeAPIClient:
     Reporting endpoints: activities, performance
     """
 
-    def get_activities(self, user_id, user_secret, start_date=None, end_date=None, account_ids=None):
+    def get_activities(self, user_id, user_secret, start_date=None, end_date=None, account_ids=None, type_filter=None):
         """Gets available activities/transactions of all brokerage accounts linked to the user"""
         endpoint_name = "activities"
 
@@ -354,6 +354,9 @@ class SnapTradeAPIClient:
 
         if end_date:
             initial_query_params["endDate"] = end_date
+            
+        if type_filter:
+            initial_query_params["type"] = type_filter
 
         if account_ids:
             # Expects a list of account ids
