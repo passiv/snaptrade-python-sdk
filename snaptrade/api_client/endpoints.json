@@ -910,7 +910,8 @@
         "query_params": [
             "broker",
             "immediateRedirect",
-            "customRedirect"
+            "customRedirect",
+            "connectionPortalVersion"
         ],
         "validation_params": [
             "clientId",

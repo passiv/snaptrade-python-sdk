@@ -45,7 +45,9 @@ class SnapTradeAPIClient:
 
         sig_content = json.dumps(sig_object, separators=(",", ":"), sort_keys=True)
 
-        sig_digest = hmac.new(self.consumer_key.encode(), sig_content.encode(), sha256).digest()
+        sig_digest = hmac.new(
+            self.consumer_key.encode(), sig_content.encode(), sha256
+        ).digest()
 
         signature = b64encode(sig_digest).decode()
 
@@ -64,7 +66,7 @@ class SnapTradeAPIClient:
         """Generates API endpoint based on endpoint_name and params given"""
         endpoint = self.endpoints[endpoint_name]
 
-        return "/api/v1/%s" % (endpoint["endpoint"] % path_params) 
+        return "/api/v1/%s" % (endpoint["endpoint"] % path_params)
 
     def _generate_api_endpoint(self, endpoint_name, **path_params):
         """Generates API endpoint based on endpoint_name and params given"""
@@ -94,7 +96,14 @@ class SnapTradeAPIClient:
 
         return prepared_params
 
-    def _make_request(self, endpoint_name, data=None, path_params=None, query_params=None, force_signature_auth=False):
+    def _make_request(
+        self,
+        endpoint_name,
+        data=None,
+        path_params=None,
+        query_params=None,
+        force_signature_auth=False,
+    ):
         """Logic to make request to SnapTrade API server"""
         if path_params is None:
             path_params = {}
@@ -109,21 +118,31 @@ class SnapTradeAPIClient:
             signature = self.get_signature(data, request_path, query_params)
             headers = {"Signature": signature}
 
+        headers["User-Agent"] = "SnapTrade/1.1.0-deprecated/python"
+
         method = self.endpoints[endpoint_name]["method"]
-        
+
         response = None
- 
+
         try:
             if method == "post":
-                response = requests.post(endpoint, headers=headers, params=query_params, json=data)
+                response = requests.post(
+                    endpoint, headers=headers, params=query_params, json=data
+                )
             elif method == "get":
                 response = requests.get(endpoint, headers=headers, params=query_params)
             elif method == "put":
-                response = requests.put(endpoint, headers=headers, params=query_params, json=data)
+                response = requests.put(
+                    endpoint, headers=headers, params=query_params, json=data
+                )
             elif method == "delete":
-                response = requests.delete(endpoint, headers=headers, params=query_params, json=data)
+                response = requests.delete(
+                    endpoint, headers=headers, params=query_params, json=data
+                )
         except ConnectionError:
-            error_message = dict(status_code=502, detail="Failed to connect to api server", code="0000")
+            error_message = dict(
+                status_code=502, detail="Failed to connect to api server", code="0000"
+            )
             if self.return_response_as_dict:
                 return error_message
             else:
@@ -133,7 +152,9 @@ class SnapTradeAPIClient:
             return response
 
         if response.status_code == 502:
-            error_message = dict(status_code=502, detail="Failed to connect to api server", code="0000")
+            error_message = dict(
+                status_code=502, detail="Failed to connect to api server", code="0000"
+            )
             if self.return_response_as_dict:
                 return error_message
             else:
@@ -143,10 +164,15 @@ class SnapTradeAPIClient:
             if response.content:
                 data = response.json()
             else:
-                data = dict(status_code=response.status_code, detail="No content returned")
+                data = dict(
+                    status_code=response.status_code, detail="No content returned"
+                )
         except:
-            data = dict(status_code=response.status_code, detail=f"{str(response.content)}", code="0000")
-
+            data = dict(
+                status_code=response.status_code,
+                detail=f"{str(response.content)}",
+                code="0000",
+            )
 
         if self.return_response_as_dict:
             return data
@@ -177,7 +203,9 @@ class SnapTradeAPIClient:
 
         query_params = self.prepare_query_params(endpoint_name)
 
-        return self._make_request(endpoint_name, query_params=query_params, force_signature_auth=True)
+        return self._make_request(
+            endpoint_name, query_params=query_params, force_signature_auth=True
+        )
 
     def register_user(self, user_id, rsa_public_key=None):
         """
@@ -190,7 +218,12 @@ class SnapTradeAPIClient:
         data = dict(userId=user_id, rsaPublicKey=rsa_public_key)
         query_params = self.prepare_query_params(endpoint_name)
 
-        return self._make_request(endpoint_name, query_params=query_params, data=data, force_signature_auth=True)
+        return self._make_request(
+            endpoint_name,
+            query_params=query_params,
+            data=data,
+            force_signature_auth=True,
+        )
 
     def delete_user(self, user_id):
         """Deletes an existing user of provided user_id"""
@@ -200,16 +233,22 @@ class SnapTradeAPIClient:
         initial_query_params = dict(userId=user_id)
         query_params = self.prepare_query_params(endpoint_name, initial_query_params)
 
-        return self._make_request(endpoint_name, query_params=query_params, force_signature_auth=True)
+        return self._make_request(
+            endpoint_name, query_params=query_params, force_signature_auth=True
+        )
 
     def get_encrypted_jwt(self, user_id, user_secret):
         """Returns encrypted JWT token"""
         endpoint_name = "get_encrypted_jwt"
 
         initial_query_params = dict(userId=user_id, userSecret=user_secret)
-        query_params = self.prepare_query_params(endpoint_name, initial_params=initial_query_params)
+        query_params = self.prepare_query_params(
+            endpoint_name, initial_params=initial_query_params
+        )
 
-        return self._make_request(endpoint_name, query_params=query_params, force_signature_auth=True)
+        return self._make_request(
+            endpoint_name, query_params=query_params, force_signature_auth=True
+        )
 
     def get_user_login_redirect_uri(
         self,
@@ -218,14 +257,17 @@ class SnapTradeAPIClient:
         broker=None,
         immediate_redirect=False,
         custom_redirect=None,
-        reconnect = None,
-        connection_type = None,
+        reconnect=None,
+        connection_type=None,
+        connection_portal_version=None,
     ):
         """Returns redirect uri for user"""
         endpoint_name = "user_login_redirect_uri"
 
         initial_query_params = dict(userId=user_id, userSecret=user_secret)
-        query_params = self.prepare_query_params(endpoint_name, initial_params=initial_query_params)
+        query_params = self.prepare_query_params(
+            endpoint_name, initial_params=initial_query_params
+        )
 
         data = dict()
         if broker:
@@ -238,11 +280,18 @@ class SnapTradeAPIClient:
             data["reconnect"] = reconnect
         if connection_type:
             data["connectionType"] = connection_type
+        if connection_portal_version:
+            data["connectionPortalVersion"] = connection_portal_version
 
         if not data:
             data = None
 
-        return self._make_request(endpoint_name, data=data, query_params=query_params, force_signature_auth=True)
+        return self._make_request(
+            endpoint_name,
+            data=data,
+            query_params=query_params,
+            force_signature_auth=True,
+        )
 
     """
     Accounts details, holdings, brokerage connection endpoints
@@ -253,37 +302,53 @@ class SnapTradeAPIClient:
         endpoint_name = "brokerage_authorizations"
 
         initial_query_params = dict(userId=user_id, userSecret=user_secret)
-        query_params = self.prepare_query_params(endpoint_name, initial_params=initial_query_params)
+        query_params = self.prepare_query_params(
+            endpoint_name, initial_params=initial_query_params
+        )
 
         return self._make_request(endpoint_name, query_params=query_params)
 
-    def get_brokerage_connection_by_id(self, user_id, user_secret, brokerage_connection_id):
+    def get_brokerage_connection_by_id(
+        self, user_id, user_secret, brokerage_connection_id
+    ):
         """Gets brokerage connection (aka. authorization) object by id"""
         endpoint_name = "brokerage_authorization_by_id"
 
         initial_query_params = dict(userId=user_id, userSecret=user_secret)
-        query_params = self.prepare_query_params(endpoint_name, initial_params=initial_query_params)
+        query_params = self.prepare_query_params(
+            endpoint_name, initial_params=initial_query_params
+        )
 
         path_params = dict(brokerage_authorization_id=brokerage_connection_id)
 
-        return self._make_request(endpoint_name, path_params=path_params, query_params=query_params)
+        return self._make_request(
+            endpoint_name, path_params=path_params, query_params=query_params
+        )
 
-    def delete_brokerage_connection(self, user_id, user_secret, brokerage_connection_id):
+    def delete_brokerage_connection(
+        self, user_id, user_secret, brokerage_connection_id
+    ):
         """Deletes brokerage connection (aka. authorization) object by id"""
         endpoint_name = "delete_brokerage_authorization"
 
         initial_query_params = dict(userId=user_id, userSecret=user_secret)
-        query_params = self.prepare_query_params(endpoint_name, initial_params=initial_query_params)
+        query_params = self.prepare_query_params(
+            endpoint_name, initial_params=initial_query_params
+        )
 
         path_params = dict(brokerage_authorization_id=brokerage_connection_id)
 
-        return self._make_request(endpoint_name, path_params=path_params, query_params=query_params)
+        return self._make_request(
+            endpoint_name, path_params=path_params, query_params=query_params
+        )
 
     def get_accounts(self, user_id, user_secret):
         """Gets all user's brokerage account"""
         endpoint_name = "accounts"
         initial_query_params = dict(userId=user_id, userSecret=user_secret)
-        query_params = self.prepare_query_params(endpoint_name, initial_params=initial_query_params)
+        query_params = self.prepare_query_params(
+            endpoint_name, initial_params=initial_query_params
+        )
 
         return self._make_request(endpoint_name, query_params=query_params)
 
@@ -291,51 +356,81 @@ class SnapTradeAPIClient:
         """Gets brokerage account object by id"""
         endpoint_name = "account_details"
         initial_query_params = dict(userId=user_id, userSecret=user_secret)
-        query_params = self.prepare_query_params(endpoint_name, initial_params=initial_query_params)
+        query_params = self.prepare_query_params(
+            endpoint_name, initial_params=initial_query_params
+        )
         path_params = dict(account_id=account_id)
 
-        return self._make_request(endpoint_name, path_params=path_params, query_params=query_params)
+        return self._make_request(
+            endpoint_name, path_params=path_params, query_params=query_params
+        )
 
     def get_account_balances(self, user_id, user_secret, account_id):
         """Gets balances for a brokerage account"""
         endpoint_name = "account_balances"
         initial_query_params = dict(userId=user_id, userSecret=user_secret)
-        query_params = self.prepare_query_params(endpoint_name, initial_params=initial_query_params)
+        query_params = self.prepare_query_params(
+            endpoint_name, initial_params=initial_query_params
+        )
         path_params = dict(account_id=account_id)
 
-        return self._make_request(endpoint_name, path_params=path_params, query_params=query_params)
+        return self._make_request(
+            endpoint_name, path_params=path_params, query_params=query_params
+        )
 
     def get_account_positions(self, user_id, user_secret, account_id):
         """Gets positions for a brokerage account"""
         endpoint_name = "account_positions"
         initial_query_params = dict(userId=user_id, userSecret=user_secret)
-        query_params = self.prepare_query_params(endpoint_name, initial_params=initial_query_params)
+        query_params = self.prepare_query_params(
+            endpoint_name, initial_params=initial_query_params
+        )
         path_params = dict(account_id=account_id)
 
-        return self._make_request(endpoint_name, path_params=path_params, query_params=query_params)
+        return self._make_request(
+            endpoint_name, path_params=path_params, query_params=query_params
+        )
 
     def get_account_holdings(self, user_id, user_secret, account_id):
         """Gets holdings (balances, positions & orders) for a brokerage account"""
         endpoint_name = "account_holdings"
         initial_query_params = dict(userId=user_id, userSecret=user_secret)
-        query_params = self.prepare_query_params(endpoint_name, initial_params=initial_query_params)
+        query_params = self.prepare_query_params(
+            endpoint_name, initial_params=initial_query_params
+        )
         path_params = dict(account_id=account_id)
 
-        return self._make_request(endpoint_name, path_params=path_params, query_params=query_params)
+        return self._make_request(
+            endpoint_name, path_params=path_params, query_params=query_params
+        )
 
-    def get_all_holdings(self, user_id, user_secret, brokerage_authorization_ids=None, account_numbers=None):
+    def get_all_holdings(
+        self,
+        user_id,
+        user_secret,
+        brokerage_authorization_ids=None,
+        account_numbers=None,
+    ):
         """Gets holdings (balances, positions & orders) acroos all brokerage accounts a user has"""
         endpoint_name = "holdings"
         initial_query_params = dict(userId=user_id, userSecret=user_secret)
 
         if brokerage_authorization_ids:
-            brokerage_authorizations_ids_string = ",".join([str(auth_id) for auth_id in brokerage_authorization_ids])
-            initial_query_params["brokerage_authorizations"] = brokerage_authorizations_ids_string
+            brokerage_authorizations_ids_string = ",".join(
+                [str(auth_id) for auth_id in brokerage_authorization_ids]
+            )
+            initial_query_params[
+                "brokerage_authorizations"
+            ] = brokerage_authorizations_ids_string
         if account_numbers:
-            accounts_numbers_string = ",".join([str(account_number) for account_number in account_numbers])
+            accounts_numbers_string = ",".join(
+                [str(account_number) for account_number in account_numbers]
+            )
             initial_query_params["accounts"] = accounts_numbers_string
 
-        query_params = self.prepare_query_params(endpoint_name, initial_params=initial_query_params)
+        query_params = self.prepare_query_params(
+            endpoint_name, initial_params=initial_query_params
+        )
 
         return self._make_request(endpoint_name, query_params=query_params)
 
@@ -343,7 +438,15 @@ class SnapTradeAPIClient:
     Reporting endpoints: activities, performance
     """
 
-    def get_activities(self, user_id, user_secret, start_date=None, end_date=None, account_ids=None, type_filter=None):
+    def get_activities(
+        self,
+        user_id,
+        user_secret,
+        start_date=None,
+        end_date=None,
+        account_ids=None,
+        type_filter=None,
+    ):
         """Gets available activities/transactions of all brokerage accounts linked to the user"""
         endpoint_name = "activities"
 
@@ -354,39 +457,59 @@ class SnapTradeAPIClient:
 
         if end_date:
             initial_query_params["endDate"] = end_date
-            
+
         if type_filter:
             initial_query_params["type"] = type_filter
 
         if account_ids:
             # Expects a list of account ids
-            initial_query_params["accounts"] = ",".join([str(account_id) for account_id in account_ids])
+            initial_query_params["accounts"] = ",".join(
+                [str(account_id) for account_id in account_ids]
+            )
 
-        query_params = self.prepare_query_params(endpoint_name, initial_params=initial_query_params)
+        query_params = self.prepare_query_params(
+            endpoint_name, initial_params=initial_query_params
+        )
 
         return self._make_request(endpoint_name, query_params=query_params)
 
     def get_performance_custom(
-        self, user_id, user_secret, start_date, end_date, frequency=None, accountIDs=None, account_ids=None
+        self,
+        user_id,
+        user_secret,
+        start_date,
+        end_date,
+        frequency=None,
+        accountIDs=None,
+        account_ids=None,
     ):
         """Gets performance information of all brokerage accounts linked to the user"""
         endpoint_name = "performance"
 
-        initial_query_params = dict(userId=user_id, userSecret=user_secret, startDate=start_date, endDate=end_date)
+        initial_query_params = dict(
+            userId=user_id,
+            userSecret=user_secret,
+            startDate=start_date,
+            endDate=end_date,
+        )
 
         if frequency:
             initial_query_params["frequency"] = frequency
 
         if account_ids:
             # Expects a list of account ids
-            initial_query_params["accounts"] = ",".join([str(account_id) for account_id in account_ids])
+            initial_query_params["accounts"] = ",".join(
+                [str(account_id) for account_id in account_ids]
+            )
         elif accountIDs:
             # accountIDs is left in for backwards compatibility. We should be using account_ids moving forward
 
             # a comma separated string is expected for accountIDs
             initial_query_params["accounts"] = accountIDs
 
-        query_params = self.prepare_query_params(endpoint_name, initial_params=initial_query_params)
+        query_params = self.prepare_query_params(
+            endpoint_name, initial_params=initial_query_params
+        )
 
         return self._make_request(endpoint_name, query_params=query_params)
 
@@ -437,7 +560,9 @@ class SnapTradeAPIClient:
         query_params = self.prepare_query_params(endpoint_name)
         path_params = dict(currency_pair=f"{src_currency_code}-{dst_currency_code}")
 
-        return self._make_request(endpoint_name, path_params=path_params, query_params=query_params)
+        return self._make_request(
+            endpoint_name, path_params=path_params, query_params=query_params
+        )
 
     def search_symbols_by_name(self, substring):
         """Get details for symbols in SnapTrade servers by a string input"""
@@ -453,7 +578,9 @@ class SnapTradeAPIClient:
         query_params = self.prepare_query_params(endpoint_name)
         path_params = dict(symbol_id=symbol_id)
 
-        return self._make_request(endpoint_name, path_params=path_params, query_params=query_params)
+        return self._make_request(
+            endpoint_name, path_params=path_params, query_params=query_params
+        )
 
     def get_symbol_details_by_ticker(self, ticker):
         """Get details for symbols in SnapTrade based on their ticker"""
@@ -461,7 +588,9 @@ class SnapTradeAPIClient:
         query_params = self.prepare_query_params(endpoint_name)
         path_params = dict(ticker=ticker)
 
-        return self._make_request(endpoint_name, path_params=path_params, query_params=query_params)
+        return self._make_request(
+            endpoint_name, path_params=path_params, query_params=query_params
+        )
 
     def search_symbols_by_account(self, user_id, user_secret, account_id, substring):
         """Search universal symbol tickers based on their substring and account id"""
@@ -476,7 +605,9 @@ class SnapTradeAPIClient:
         path_params = dict(account_id=account_id)
         data = dict(substring=substring)
 
-        return self._make_request(endpoint_name, data=data, path_params=path_params, query_params=query_params)
+        return self._make_request(
+            endpoint_name, data=data, path_params=path_params, query_params=query_params
+        )
 
     def get_security_types(self):
         """Get a list of security types supported by SnapTrade"""
@@ -498,7 +629,9 @@ class SnapTradeAPIClient:
     Trading endpoints
     """
 
-    def get_market_quotes(self, user_id, user_secret, account_id, symbols, search_by_ticker=False):
+    def get_market_quotes(
+        self, user_id, user_secret, account_id, symbols, search_by_ticker=False
+    ):
         """Gets market quotes of symbols using either their id or tickers"""
 
         endpoint_name = "symbol_quotes"
@@ -514,9 +647,13 @@ class SnapTradeAPIClient:
         query_params = self.prepare_query_params(endpoint_name, initial_query_params)
         path_params = dict(account_id=account_id)
 
-        return self._make_request(endpoint_name, path_params=path_params, query_params=query_params)
+        return self._make_request(
+            endpoint_name, path_params=path_params, query_params=query_params
+        )
 
-    def get_account_order_history(self, user_id, user_secret, account_id, state=None, days=None):
+    def get_account_order_history(
+        self, user_id, user_secret, account_id, state=None, days=None
+    ):
         """Gets the order history of an account"""
         endpoint_name = "account_orders_history"
 
@@ -528,10 +665,14 @@ class SnapTradeAPIClient:
         if days:
             initial_query_params["days"] = days
 
-        query_params = self.prepare_query_params(endpoint_name, initial_params=initial_query_params)
+        query_params = self.prepare_query_params(
+            endpoint_name, initial_params=initial_query_params
+        )
         path_params = dict(account_id=account_id)
 
-        return self._make_request(endpoint_name, path_params=path_params, query_params=query_params)
+        return self._make_request(
+            endpoint_name, path_params=path_params, query_params=query_params
+        )
 
     def get_trade_impact(
         self,
@@ -550,7 +691,9 @@ class SnapTradeAPIClient:
 
         initial_query_params = dict(userId=user_id, userSecret=user_secret)
 
-        query_params = self.prepare_query_params(endpoint_name, initial_params=initial_query_params)
+        query_params = self.prepare_query_params(
+            endpoint_name, initial_params=initial_query_params
+        )
 
         if time_in_force.title() == "Day":
             time_in_force = time_in_force.title()
@@ -565,7 +708,9 @@ class SnapTradeAPIClient:
             "units": units,
         }
 
-        return self._make_request(endpoint_name, data=trade_data, query_params=query_params)
+        return self._make_request(
+            endpoint_name, data=trade_data, query_params=query_params
+        )
 
     def place_order(self, user_id, user_secret, trade_id):
         """Places an order on a brokerage account"""
@@ -573,11 +718,15 @@ class SnapTradeAPIClient:
 
         initial_query_params = dict(userId=user_id, userSecret=user_secret)
 
-        query_params = self.prepare_query_params(endpoint_name, initial_params=initial_query_params)
+        query_params = self.prepare_query_params(
+            endpoint_name, initial_params=initial_query_params
+        )
 
         path_params = dict(trade_id=trade_id)
 
-        return self._make_request(endpoint_name, path_params=path_params, query_params=query_params)
+        return self._make_request(
+            endpoint_name, path_params=path_params, query_params=query_params
+        )
 
     def cancel_order(self, user_id, user_secret, account_id, brokerage_order_id):
         """Cancels an existing order on a brokerage account"""
@@ -585,15 +734,19 @@ class SnapTradeAPIClient:
 
         initial_query_params = dict(userId=user_id, userSecret=user_secret)
 
-        query_params = self.prepare_query_params(endpoint_name, initial_params=initial_query_params)
+        query_params = self.prepare_query_params(
+            endpoint_name, initial_params=initial_query_params
+        )
 
         path_params = dict(account_id=account_id)
 
         data = dict(brokerage_order_id=brokerage_order_id)
 
-        return self._make_request(endpoint_name, path_params=path_params, query_params=query_params, data=data)
+        return self._make_request(
+            endpoint_name, path_params=path_params, query_params=query_params, data=data
+        )
 
-    def place_unvalidated_trade(        
+    def place_unvalidated_trade(
         self,
         user_id,
         user_secret,
@@ -604,16 +757,17 @@ class SnapTradeAPIClient:
         time_in_force,
         units,
         price=None,
-        stop_price=None
+        stop_price=None,
     ):
         """Places a trade with no validation"""
         endpoint_name = "place_unvalidated_trade"
 
         initial_query_params = dict(userId=user_id, userSecret=user_secret)
 
-        query_params = self.prepare_query_params(endpoint_name, initial_params=initial_query_params)
+        query_params = self.prepare_query_params(
+            endpoint_name, initial_params=initial_query_params
+        )
 
-        
         if time_in_force.upper() == "DAY":
             time_in_force = time_in_force.title()
         else:
@@ -627,10 +781,12 @@ class SnapTradeAPIClient:
             "time_in_force": time_in_force,
             "units": units,
             "price": price,
-            "stop": stop_price
+            "stop": stop_price,
         }
 
-        return self._make_request(endpoint_name, data=trade_data, query_params=query_params)
+        return self._make_request(
+            endpoint_name, data=trade_data, query_params=query_params
+        )
 
     """
     SnapTrade Partners Brokerage API Credentials Endpoints
@@ -670,10 +826,16 @@ class SnapTradeAPIClient:
 
         path_params = dict(credentials_id=credentials_id)
 
-        return self._make_request(endpoint_name, path_params=path_params, query_params=query_params)
+        return self._make_request(
+            endpoint_name, path_params=path_params, query_params=query_params
+        )
 
     def update_brokerage_api_credentials(
-        self, credentials_id, brokerage_api_client_id=None, brokerage_api_client_secret=None, redirect_uri=None
+        self,
+        credentials_id,
+        brokerage_api_client_id=None,
+        brokerage_api_client_secret=None,
+        redirect_uri=None,
     ):
         """Updates an existing brokerage api credential"""
         endpoint_name = "api_credentials_update"
@@ -687,7 +849,9 @@ class SnapTradeAPIClient:
             "redirectURI": redirect_uri,
         }
 
-        return self._make_request(endpoint_name, data=data, path_params=path_params, query_params=query_params)
+        return self._make_request(
+            endpoint_name, data=data, path_params=path_params, query_params=query_params
+        )
 
     def delete_brokerage_api_credentials(self, credentials_id):
         """Deletes an existing brokerage api credential"""
@@ -696,7 +860,9 @@ class SnapTradeAPIClient:
 
         path_params = dict(credentials_id=credentials_id)
 
-        return self._make_request(endpoint_name, path_params=path_params, query_params=query_params)
+        return self._make_request(
+            endpoint_name, path_params=path_params, query_params=query_params
+        )
 
     def preview_option_trade(
         self,
@@ -714,7 +880,9 @@ class SnapTradeAPIClient:
         """
         endpoint_name = "preview_option_trade"
         initial_query_params = dict(userId=user_id, userSecret=user_secret)
-        query_params = self.prepare_query_params(endpoint_name, initial_params=initial_query_params)
+        query_params = self.prepare_query_params(
+            endpoint_name, initial_params=initial_query_params
+        )
         path_params = dict()
         data = dict(
             account_id=account_id,
@@ -725,19 +893,27 @@ class SnapTradeAPIClient:
             units=units,
         )
 
-        return self._make_request(endpoint_name, path_params=path_params, query_params=query_params, data=data)
+        return self._make_request(
+            endpoint_name, path_params=path_params, query_params=query_params, data=data
+        )
 
-    def execute_option_trade(self, user_id: str, user_secret: str, calculated_trade_id: str):
+    def execute_option_trade(
+        self, user_id: str, user_secret: str, calculated_trade_id: str
+    ):
         """
         Executes an option trade, after previewing and confirming its validity with the `preview_option_trade` method above.
         Executes a POST request to `v1/optionTrade/%(uuid_pk)s/`.
         """
         endpoint_name = "execute_option_trade"
         initial_query_params = dict(userId=user_id, userSecret=user_secret)
-        query_params = self.prepare_query_params(endpoint_name, initial_params=initial_query_params)
+        query_params = self.prepare_query_params(
+            endpoint_name, initial_params=initial_query_params
+        )
         path_params = dict(uuid_pk=calculated_trade_id)
 
-        return self._make_request(endpoint_name, path_params=path_params, query_params=query_params)
+        return self._make_request(
+            endpoint_name, path_params=path_params, query_params=query_params
+        )
 
     """
     Retrieve error logs
@@ -748,6 +924,10 @@ class SnapTradeAPIClient:
         endpoint_name = "retrieve_error_logs"
         initial_query_params = dict(userId=user_id, userSecret=userSecret)
 
-        query_params = self.prepare_query_params(endpoint_name, initial_params=initial_query_params)
+        query_params = self.prepare_query_params(
+            endpoint_name, initial_params=initial_query_params
+        )
 
-        return self._make_request(endpoint_name, query_params=query_params, force_signature_auth=True)
+        return self._make_request(
+            endpoint_name, query_params=query_params, force_signature_auth=True
+        )
